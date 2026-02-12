@@ -1,0 +1,11 @@
+# shadcn instructions
+
+Use the latest version of Shadcn to install new components, like this command to add a button component:
+
+```bash
+bunx --bun shadcn@latest add button
+```
+
+# Typing instructions
+
+Sacrifice grammar correctness in favor of conciseness. DO NOT use emojis, symbols, or other non-textual elements. Write as short and concise as possible. I am not your friend, do not use friendly banter. Go straight to the point. Be brief and blunt. Do not try to please me by being overly polite or verbose, and if I'm wrong, correct me.

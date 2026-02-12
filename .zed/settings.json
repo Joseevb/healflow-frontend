@@ -1,0 +1,53 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
+{
+  "languages": {
+    "JavaScript": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "bun",
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"],
+        },
+      },
+    },
+    "TypeScript": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "bun",
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"],
+        },
+      },
+    },
+    "TSX": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "bun",
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"],
+        },
+      },
+    },
+  },
+  "lsp": {
+    "oxfmt": {
+      "initialization_options": {
+        "settings": {
+          "fmt.configPath": null,
+        },
+      },
+    },
+    "oxlint": {
+      "initialization_options": {
+        "settings": {
+          "configPath": "oxlintrc.jsonc",
+          "run": "onType",
+          "typeAware": true,
+        },
+      },
+    },
+  },
+}
