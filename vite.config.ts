@@ -6,6 +6,8 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const config = defineConfig({
   plugins: [
     devtools(),
@@ -15,7 +17,7 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart(),
-    nitro({ preset: "bun" }),
+    isDev && nitro({ preset: "bun" }),
     viteReact(),
   ],
 });
