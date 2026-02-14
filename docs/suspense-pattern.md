@@ -21,9 +21,9 @@ The original implementation had issues with dynamic form updates:
    ```typescript
    await context.queryClient.ensureQueryData(
      getAvailableSpecialistsOptions({
-       query: { type: 'GENERAL_PRACTICE' },
+       query: { type: "GENERAL_PRACTICE" },
      }),
-   )
+   );
    ```
 
    - Prefetches data on the server/loader level
@@ -53,9 +53,9 @@ The original implementation had issues with dynamic form updates:
    ```typescript
    const { data: specialistsResponse } = useSuspenseQuery(
      getAvailableSpecialistsOptions({
-       query: { type: 'GENERAL_PRACTICE' },
+       query: { type: "GENERAL_PRACTICE" },
      }),
-   )
+   );
    ```
 
    - Suspends component rendering until data is ready
@@ -63,6 +63,7 @@ The original implementation had issues with dynamic form updates:
    - Data is guaranteed to be available after hook returns
 
 4. **Conditional rendering** (line 172-181)
+
    ```typescript
    if (!specialistsResponse || specialistsResponse.length === 0) {
      return <Alert variant="destructive">...</Alert>

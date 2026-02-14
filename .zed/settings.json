@@ -9,45 +9,45 @@
       "formatter": {
         "external": {
           "command": "bun",
-          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"],
-        },
-      },
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"]
+        }
+      }
     },
     "TypeScript": {
       "format_on_save": "on",
       "formatter": {
         "external": {
           "command": "bun",
-          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"],
-        },
-      },
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"]
+        }
+      }
     },
     "TSX": {
       "format_on_save": "on",
       "formatter": {
         "external": {
           "command": "bun",
-          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"],
-        },
-      },
-    },
+          "arguments": ["oxfmt", "--stdin-filepath", "{buffer_path}"]
+        }
+      }
+    }
   },
   "lsp": {
     "oxfmt": {
       "initialization_options": {
         "settings": {
-          "fmt.configPath": null,
-        },
-      },
+          "fmt.configPath": null
+        }
+      }
     },
     "oxlint": {
       "initialization_options": {
         "settings": {
           "configPath": "oxlintrc.jsonc",
           "run": "onType",
-          "typeAware": true,
-        },
-      },
-    },
-  },
+          "typeAware": true
+        }
+      }
+    }
+  }
 }

@@ -4,7 +4,7 @@ This app is a Hospital Management System called HealFlow. It is built using Type
 
 ## Auth Flow
 
-The user authenticates on the frontend using Better Auth. After successful authentication, a JWT is created and stored in the browser's local storage. The JWT is then used to authenticate the user on subsequent requests to the backend API. 
+The user authenticates on the frontend using Better Auth. After successful authentication, a JWT is created and stored in the browser's local storage. The JWT is then used to authenticate the user on subsequent requests to the backend API.
 
 # Better Auth
 

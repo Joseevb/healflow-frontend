@@ -40,9 +40,9 @@ The implementation uses **request interceptors** on the auto-generated API clien
    // In your component
    const { data } = useQuery(
      getAvailableSpecialistsOptions({
-       query: { type: 'GENERAL_PRACTICE' },
+       query: { type: "GENERAL_PRACTICE" },
      }),
-   )
+   );
    ```
 
 3. **Interceptor Logic**
@@ -121,11 +121,11 @@ function SpecialistSelector() {
 
 ```typescript
 // Server function (Effect.js pattern)
-import { Effect } from 'effect'
-import { UserRegistrationService } from '@/services/user-registration.service'
-import { apiKeyConfig } from '@/lib/api-key.config'
+import { Effect } from "effect";
+import { UserRegistrationService } from "@/services/user-registration.service";
+import { apiKeyConfig } from "@/lib/api-key.config";
 
-const service = new UserRegistrationService(apiKeyConfig)
+const service = new UserRegistrationService(apiKeyConfig);
 
 await Effect.runPromise(
   service.post({
@@ -133,7 +133,7 @@ await Effect.runPromise(
     email: email,
     specialist_id: specialistId,
   }),
-)
+);
 ```
 
 ## Regenerating the Client
@@ -217,9 +217,9 @@ curl -H "X-API-KEY: your-key" http://localhost:8080/api/v1/specialists
 await provisionUser({
   body: userData,
   headers: {
-    'X-API-KEY': process.env.API_SERVICE_KEY,
+    "X-API-KEY": process.env.API_SERVICE_KEY,
   },
-})
+});
 ```
 
 **After:**
@@ -228,7 +228,7 @@ await provisionUser({
 // Headers added automatically
 await provisionUser({
   body: userData,
-})
+});
 ```
 
 The interceptor approach is cleaner and ensures consistency across all requests.

@@ -1,41 +1,27 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useMemo } from 'react'
-import {
-  AlertCircle,
-  AlertTriangle,
-  Calendar,
-  Clock,
-  Pill,
-  Plus,
-  RefreshCw,
-} from 'lucide-react'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import BookMedicationRefillDialog from './-components/book-medication-refill-dialog'
-import type { JSX } from 'react'
-import type { LucideIcon } from 'lucide-react'
-import type { ColumnDef } from '@tanstack/react-table'
-import type { UserMedicinesResponse } from '@/client'
-import { DataTable } from '@/components/data-table'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { getUserMedicinesOptions } from '@/client/@tanstack/react-query.gen'
-import { Skeleton } from '@/components/ui/skeleton'
+import { createFileRoute } from "@tanstack/react-router";
+import { useMemo } from "react";
+import { AlertCircle, AlertTriangle, Calendar, Clock, Pill, Plus, RefreshCw } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import BookMedicationRefillDialog from "./-components/book-medication-refill-dialog";
+import type { JSX } from "react";
+import type { LucideIcon } from "lucide-react";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { UserMedicinesResponse } from "@/client";
+import { DataTable } from "@/components/data-table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { getUserMedicinesOptions } from "@/client/@tanstack/react-query.gen";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute('/dashboard/medications')({
+export const Route = createFileRoute("/dashboard/medications")({
   component: RouteComponent,
   loader: ({ context }) => {
-    return context.queryClient.ensureQueryData(getUserMedicinesOptions())
+    return context.queryClient.ensureQueryData(getUserMedicinesOptions());
   },
   pendingComponent: LoadingComponent,
   errorComponent: ErrorBoundaryComponent,
-})
+});
 
 // Loading Component
 
@@ -99,7 +85,7 @@ function LoadingComponent() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 // Error Component
@@ -119,8 +105,8 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
             </h1>
           </div>
           <p className="text-muted-foreground max-w-md">
-            Track your current medications, dosages, and manage prescription
-            refills all in one place.
+            Track your current medications, dosages, and manage prescription refills all in one
+            place.
           </p>
         </div>
       </header>
@@ -137,8 +123,8 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
                 Failed to Load Medications
               </h3>
               <p className="text-red-700 dark:text-red-300 max-w-md">
-                We couldn't retrieve your medication information. Please try
-                refreshing the page or contact support if the problem persists.
+                We couldn't retrieve your medication information. Please try refreshing the page or
+                contact support if the problem persists.
               </p>
               <details className="mt-4">
                 <summary className="text-sm text-red-600 dark:text-red-400 cursor-pointer hover:underline">
@@ -161,17 +147,17 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 // Internal Components
 
 interface MedicationIconCellProps {
-  name: string
-  iconBg: string
-  iconRing: string
-  iconColor: string
-  textColor: string
+  name: string;
+  iconBg: string;
+  iconRing: string;
+  iconColor: string;
+  textColor: string;
 }
 
 function MedicationIconCell({
@@ -188,43 +174,33 @@ function MedicationIconCell({
       </div>
       <span className={`font-semibold ${textColor}`}>{name}</span>
     </div>
-  )
+  );
 }
 
 interface ColumnHeaderWithIconProps {
-  icon: LucideIcon
-  iconColor: string
-  label: string
+  icon: LucideIcon;
+  iconColor: string;
+  label: string;
 }
 
-function ColumnHeaderWithIcon({
-  icon: Icon,
-  iconColor,
-  label,
-}: ColumnHeaderWithIconProps) {
+function ColumnHeaderWithIcon({ icon: Icon, iconColor, label }: ColumnHeaderWithIconProps) {
   return (
     <span className="flex items-center gap-2">
       <Icon className={`size-4 ${iconColor}`} />
       {label}
     </span>
-  )
+  );
 }
 
 interface StatCardProps {
-  icon: LucideIcon
-  iconBg: string
-  label: string
-  value: string | number
-  valueColor?: string
+  icon: LucideIcon;
+  iconBg: string;
+  label: string;
+  value: string | number;
+  valueColor?: string;
 }
 
-function StatCard({
-  icon: Icon,
-  iconBg,
-  label,
-  value,
-  valueColor,
-}: StatCardProps) {
+function StatCard({ icon: Icon, iconBg, label, value, valueColor }: StatCardProps) {
   return (
     <Card className="group border-0 shadow-md hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 transition-all duration-300">
       <CardContent className="p-6">
@@ -236,23 +212,23 @@ function StatCard({
           </div>
           <div>
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
-            <p className={`text-2xl font-bold ${valueColor || ''}`}>{value}</p>
+            <p className={`text-2xl font-bold ${valueColor || ""}`}>{value}</p>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 interface MedicationTableCardProps {
-  title: string
-  description: string
-  icon: LucideIcon
-  iconBg: string
-  headerBg: string
-  borderColor: string
-  columns: Array<ColumnDef<UserMedicinesResponse>>
-  data: Array<UserMedicinesResponse>
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  iconBg: string;
+  headerBg: string;
+  borderColor: string;
+  columns: Array<ColumnDef<UserMedicinesResponse>>;
+  data: Array<UserMedicinesResponse>;
 }
 
 function MedicationTableCard({
@@ -267,9 +243,7 @@ function MedicationTableCard({
 }: MedicationTableCardProps) {
   return (
     <Card className="border border-slate-200/80 dark:border-slate-700/80 shadow-lg dark:shadow-slate-900/50 overflow-hidden p-0 bg-white dark:bg-slate-800/80">
-      <CardHeader
-        className={`${headerBg} border-b ${borderColor} rounded-t-xl pt-6 pb-6`}
-      >
+      <CardHeader className={`${headerBg} border-b ${borderColor} rounded-t-xl pt-6 pb-6`}>
         <div className="flex items-center gap-3">
           <div className={`p-2 ${iconBg} rounded-lg`}>
             <Icon className="size-5" />
@@ -284,7 +258,7 @@ function MedicationTableCard({
         <DataTable columns={columns} data={data} />
       </CardContent>
     </Card>
-  )
+  );
 }
 
 // Column Factories
@@ -297,38 +271,32 @@ function createMedicationNameColumn(
   headerIconColor: string,
 ): ColumnDef<UserMedicinesResponse> {
   return {
-    accessorKey: 'medicine_name',
+    accessorKey: "medicine_name",
     header: () => (
-      <ColumnHeaderWithIcon
-        icon={Pill}
-        iconColor={headerIconColor}
-        label="Medication"
-      />
+      <ColumnHeaderWithIcon icon={Pill} iconColor={headerIconColor} label="Medication" />
     ),
     cell: ({ row }) => (
       <MedicationIconCell
-        name={row.getValue('medicine_name')}
+        name={row.getValue("medicine_name")}
         iconBg={iconBg}
         iconRing={iconRing}
         iconColor={iconColor}
         textColor={textColor}
       />
     ),
-  }
+  };
 }
 
-function createDosageColumn(
-  variant: 'purple' | 'secondary',
-): ColumnDef<UserMedicinesResponse> {
+function createDosageColumn(variant: "purple" | "secondary"): ColumnDef<UserMedicinesResponse> {
   return {
-    accessorKey: 'dosage',
-    header: 'Dosage',
+    accessorKey: "dosage",
+    header: "Dosage",
     cell: ({ row }) => (
       <Badge variant={variant} size="sm" className="font-medium">
-        {row.getValue('dosage')}
+        {row.getValue("dosage")}
       </Badge>
     ),
-  }
+  };
 }
 
 function createTextColumn(
@@ -340,66 +308,54 @@ function createTextColumn(
     accessorKey: key,
     header,
     cell: ({ row }) => <span className={textColor}>{row.getValue(key)}</span>,
-  }
+  };
 }
 
 // Main Component
 
 function RouteComponent() {
   // Fetch medications from API
-  const { data: medications } = useSuspenseQuery(getUserMedicinesOptions())
+  const { data: medications } = useSuspenseQuery(getUserMedicinesOptions());
 
   const currentColumns: Array<ColumnDef<UserMedicinesResponse>> = useMemo(
     (): Array<ColumnDef<UserMedicinesResponse>> => [
       createMedicationNameColumn(
-        'bg-purple-100 dark:bg-purple-900/30',
-        'ring-purple-200/50 dark:ring-purple-800/50',
-        'text-purple-600 dark:text-purple-400',
-        'text-slate-900 dark:text-slate-100',
-        'text-purple-600',
+        "bg-purple-100 dark:bg-purple-900/30",
+        "ring-purple-200/50 dark:ring-purple-800/50",
+        "text-purple-600 dark:text-purple-400",
+        "text-slate-900 dark:text-slate-100",
+        "text-purple-600",
       ),
-      createDosageColumn('purple'),
+      createDosageColumn("purple"),
       createTextColumn(
-        'frequency',
-        () => (
-          <ColumnHeaderWithIcon
-            icon={Clock}
-            iconColor="text-blue-600"
-            label="Frequency"
-          />
-        ),
-        'text-slate-600 dark:text-slate-300 font-medium',
+        "frequency",
+        () => <ColumnHeaderWithIcon icon={Clock} iconColor="text-blue-600" label="Frequency" />,
+        "text-slate-600 dark:text-slate-300 font-medium",
       ),
       createTextColumn(
-        'start_date',
+        "start_date",
         () => (
-          <ColumnHeaderWithIcon
-            icon={Calendar}
-            iconColor="text-green-600"
-            label="Start Date"
-          />
+          <ColumnHeaderWithIcon icon={Calendar} iconColor="text-green-600" label="Start Date" />
         ),
-        'text-slate-600 dark:text-slate-300',
+        "text-slate-600 dark:text-slate-300",
       ),
       {
-        accessorKey: 'end_date',
-        header: 'End Date',
+        accessorKey: "end_date",
+        header: "End Date",
         cell: ({ row }) => {
-          const endDate = row.original.end_date
+          const endDate = row.original.end_date;
           return endDate ? (
-            <span className="text-slate-600 dark:text-slate-300">
-              {endDate}
-            </span>
+            <span className="text-slate-600 dark:text-slate-300">{endDate}</span>
           ) : (
             <Badge variant="success" size="sm" className="font-medium">
               Ongoing
             </Badge>
-          )
+          );
         },
       },
       {
-        id: 'actions',
-        header: '',
+        id: "actions",
+        header: "",
         cell: ({ row }) => (
           <BookMedicationRefillDialog
             medicationName={row.original.medicine_name}
@@ -418,42 +374,38 @@ function RouteComponent() {
       },
     ],
     [],
-  )
+  );
 
   const pastColumns: Array<ColumnDef<UserMedicinesResponse>> = useMemo(
     (): Array<ColumnDef<UserMedicinesResponse>> => [
       createMedicationNameColumn(
-        'bg-slate-100 dark:bg-slate-700/50',
-        'ring-slate-200/50 dark:ring-slate-600/50',
-        'text-slate-500 dark:text-slate-400',
-        'text-slate-600 dark:text-slate-400',
-        'text-slate-500',
+        "bg-slate-100 dark:bg-slate-700/50",
+        "ring-slate-200/50 dark:ring-slate-600/50",
+        "text-slate-500 dark:text-slate-400",
+        "text-slate-600 dark:text-slate-400",
+        "text-slate-500",
       ),
-      createDosageColumn('secondary'),
-      createTextColumn(
-        'end_date',
-        'Ended',
-        'text-slate-600 dark:text-slate-400',
-      ),
+      createDosageColumn("secondary"),
+      createTextColumn("end_date", "Ended", "text-slate-600 dark:text-slate-400"),
     ],
     [],
-  )
+  );
 
   const currentMedications = medications.filter((med) => {
-    if (!med.end_date) return true // No end date means currently active
-    const endDate = new Date(med.end_date)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0) // Reset time to start of day for accurate comparison
-    return endDate >= today
-  })
+    if (!med.end_date) return true; // No end date means currently active
+    const endDate = new Date(med.end_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+    return endDate >= today;
+  });
 
   const pastMedications = medications.filter((med) => {
-    if (!med.end_date) return false // No end date means currently active, not past
-    const endDate = new Date(med.end_date)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0) // Reset time to start of day for accurate comparison
-    return endDate < today
-  })
+    if (!med.end_date) return false; // No end date means currently active, not past
+    const endDate = new Date(med.end_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+    return endDate < today;
+  });
 
   return (
     <div className="space-y-8">
@@ -472,8 +424,8 @@ function RouteComponent() {
             </Badge>
           </div>
           <p className="text-muted-foreground max-w-md">
-            Track your current medications, dosages, and manage prescription
-            refills all in one place.
+            Track your current medications, dosages, and manage prescription refills all in one
+            place.
           </p>
         </div>
         <div className="flex gap-2">
@@ -535,5 +487,5 @@ function RouteComponent() {
         data={pastMedications}
       />
     </div>
-  )
+  );
 }

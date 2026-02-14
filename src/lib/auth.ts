@@ -9,16 +9,16 @@ import { db } from "@/db";
 
 import * as schema from "@/db/schemas";
 
+import { Database } from "bun:sqlite";
+
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-01-28.clover",
 });
 
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "sqlite",
-    schema,
-  }),
+const database = new Database(process.env.DB_FILE_NAME!);
 
+export const auth = betterAuth({
+  database,
   advanced: {
     database: {
       generateId: () => v7(),
