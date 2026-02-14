@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { RoutePath } from "@/types/routes";
 
 type UserMenuItemBase = {
   label: string;
@@ -22,7 +23,7 @@ type UserMenuItemBase = {
 
 type UserMenuItemLink = UserMenuItemBase & {
   type: "link";
-  url: string;
+  url: RoutePath;
 };
 
 type UserMenuButton = UserMenuItemBase & {
@@ -42,7 +43,7 @@ const userMenuItems: Array<UserMenuItem> = [
   },
   {
     type: "link",
-    url: "/settings",
+    url: "/dashboard/settings",
     label: "Settings",
     icon: <Settings className="h-4 w-4" />,
   },
