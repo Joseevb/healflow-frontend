@@ -5,10 +5,16 @@ import viteReact from "@vitejs/plugin-react";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
+import { fileURLToPath } from "node:url";
 
 const isDev = process.env.NODE_ENV !== "production";
 
 const config = defineConfig({
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
   plugins: [
     devtools(),
     // this is the plugin that enables path aliases
@@ -17,8 +23,12 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart(),
-    isDev && nitro({ preset: "bun" }),
-    viteReact(),
+    isDev ? nitro({ preset: "bun" }) : nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    viteReact({
+      babel: {
+        plugins: ["babel-plugin-react-compiler"],
+      },
+    }),
   ],
 });
 
