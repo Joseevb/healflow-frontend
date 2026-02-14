@@ -113,9 +113,7 @@
     "vitest": "^4.0.18",
     "web-vitals": "^5.1.0"
   },
-  "peerDependenciesMeta": {
-    "better-sqlite3": {
-      "optional": true
-    }
+  "overrides": {
+    "better-sqlite3": "null"
   }
 }
