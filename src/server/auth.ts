@@ -36,7 +36,7 @@ export const checkIsNewUser = createServerFn({ method: "GET" }).handler(async ()
     const headerName = await Effect.runPromise(apiKeyConfig.getHeaderName());
 
     return await validateUser({
-      body: { ids: [userId] },
+      body: { ids: [...userId] },
       headers: {
         [headerName]: apiKey,
       },
