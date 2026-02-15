@@ -4,7 +4,7 @@ import { stripeClient } from "@better-auth/stripe/client";
 import type { auth } from "./auth";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.PUBLIC_APP_URL || "http://localhost:3000",
+  baseURL: process.env.PUBLIC_APP_URL,
   plugins: [
     jwtClient(),
     adminClient(),
