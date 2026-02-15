@@ -59,3 +59,4 @@ const program = Effect.gen(function* () {
 Effect.runPromise(program).catch((error) => {
   console.error("Failed:", error);
   process.exit(1);
+});
