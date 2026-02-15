@@ -1,6 +1,7 @@
 import { createClient } from "@hey-api/openapi-ts";
 import { Console, Effect } from "effect";
 
+<<<<<<< Updated upstream
 const API_DOCS_URL = process.env.API_DOCS_URL || "http://localhost:8080/v3/api-docs";
 const TIMEOUT_MS = 120_000;
 
@@ -59,4 +60,18 @@ const program = Effect.gen(function* () {
 Effect.runPromise(program).catch((error) => {
   console.error("Failed:", error);
   process.exit(1);
+=======
+createClient({
+  input: process.env.API_DOCS_URL || "http://localhost:8080/v3/api-docs",
+  output: "src/client",
+  plugins: [
+    "@hey-api/typescript",
+    "@hey-api/sdk",
+    {
+      name: "@hey-api/client-fetch",
+      baseUrl: process.env.API_URL || "http://localhost:8080",
+    },
+    "@tanstack/react-query",
+  ],
+>>>>>>> Stashed changes
 });

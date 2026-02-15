@@ -81,7 +81,7 @@ export const verifications = sqliteTable(
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
 );
 
-export const jwks = sqliteTable("jwks", {
+export const jwkss = sqliteTable("jwkss", {
   id: text("id").primaryKey(),
   publicKey: text("public_key").notNull(),
   privateKey: text("private_key").notNull(),
@@ -89,7 +89,7 @@ export const jwks = sqliteTable("jwks", {
   expiresAt: integer("expires_at", { mode: "timestamp_ms" }),
 });
 
-export const subscription = sqliteTable("subscription", {
+export const subscriptions = sqliteTable("subscriptions", {
   id: text("id").primaryKey(),
   plan: text("plan").notNull(),
   referenceId: text("reference_id").notNull(),
@@ -110,8 +110,8 @@ export const subscription = sqliteTable("subscription", {
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
-  sessionss: many(sessions),
-  accountss: many(accounts),
+  sessions: many(sessions),
+  accounts: many(accounts),
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({

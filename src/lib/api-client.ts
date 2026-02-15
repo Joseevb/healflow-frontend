@@ -10,6 +10,13 @@
 
 import { client } from "@/client/client.gen";
 
+// const API_URL = process.env.API_URL || "http://localhost:8080";
+// console.debug({ API_URL });
+
+// client.setConfig({
+//   baseUrl: process.env.API_URL || "http://localhost:8080",
+// });
+
 /**
  * List of API endpoints that require API key authentication.
  * These endpoints use X-API-KEY header instead of Bearer token.
