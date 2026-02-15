@@ -58,14 +58,10 @@ export const auth = betterAuth({
       },
     }),
   ],
-  user: { modelName: "users" },
-  session: { modelName: "sessions" },
   account: {
-    modelName: "accounts",
     accountLinking: {
       enabled: true,
     },
   },
-  verification: { modelName: "verifications" },
   callbackURL: "/dashboard",
 });
