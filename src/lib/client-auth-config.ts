@@ -1,5 +1,5 @@
 import { client } from "@/client/client.gen";
-import { configureApiKeyInterceptor } from "@/lib/api-client";
+import { configureApiKeyInterceptor } from "@/lib/api-client.server";
 
 // Configure API key interceptor for server-side requests
 configureApiKeyInterceptor();
