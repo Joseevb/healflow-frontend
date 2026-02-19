@@ -22,7 +22,7 @@
     "cn:add": "bunx --bun shadcn@latest add",
     "openapi-ts": "rm -rf ./src/client && bun run ./src/heyapi.code-gen.ts",
     "auth:generate": "bunx --bun @better-auth/cli generate --output=src/db/schemas/auth-schema.ts --config=./src/lib/auth.ts -y",
-    "prebuild": "bun run auth:generate && bun run openapi-ts && bun run db:migrate",
+    "prebuild": "bun run openapi-ts && bun run db:migrate",
     "stripe:webhook": "stripe listen --forward-to localhost:3000/api/auth/stripe/webhook"
   },
   "dependencies": {
