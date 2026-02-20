@@ -6,6 +6,7 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
 import { fileURLToPath } from "node:url";
+import netlify from "@netlify/vite-plugin-tanstack-start"; // ← add this
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -23,7 +24,7 @@ const config = defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tailwindcss(),
-    isDev ? nitro({ preset: "bun" }) : nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    isDev ? nitro({ preset: "bun" }) : netlify(),
     viteReact({
       babel: {
         plugins: ["babel-plugin-react-compiler"],
