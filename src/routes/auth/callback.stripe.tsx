@@ -1,16 +1,14 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Effect } from "effect";
-import { useSignUpSession } from "@/server/session";
 import { UserRegistrationService } from "@/services/user-registration.service";
 import { apiKeyConfig } from "@/lib/api-key.config";
 import { attempt } from "@/lib/attempt";
+import { clearSignUpSession, getSignUpSession } from "@/server/session";
 
 export const Route = createFileRoute("/auth/callback/stripe")({
   component: () => null,
   loader: async () => {
-    const session = await useSignUpSession();
-    const { createdUserId, accountData, userData } = session.data;
-
+    const { createdUserId, accountData, userData } = await getSignUpSession();
     if (!createdUserId || !accountData || !userData) {
       throw redirect({ to: "/auth/sign-up" });
     }
@@ -42,7 +40,7 @@ export const Route = createFileRoute("/auth/callback/stripe")({
     console.log("[Stripe Callback] User provisioned successfully");
 
     // Success! Clear session
-    await session.clear();
+    await clearSignUpSession();
     throw redirect({ to: "/dashboard" });
   },
 });

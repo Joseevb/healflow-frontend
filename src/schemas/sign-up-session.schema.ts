@@ -38,3 +38,5 @@ export const serializableSignUpSession = z.object({
   createdUserId: z.string().optional(),
   isPaymentSuccessfull: z.boolean().optional(),
 });
+
+export type SerializableSignUpSession = z.infer<typeof serializableSignUpSession>;

@@ -2,12 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { Effect } from "effect";
 
-import { useSignUpSession } from "./session";
 import { auth } from "@/lib/auth";
 import { apiKeyConfig } from "@/lib/api-key.config";
 import { UserSyncService } from "@/services/user-sync.service";
 import { validateUser } from "@/client/sdk.gen";
 import { attempt } from "@/lib/attempt";
+import { updateSignUpSession } from "./session";
 
 /**
  * Checks if the current user is new (not yet provisioned in backend).
@@ -15,7 +15,6 @@ import { attempt } from "@/lib/attempt";
  */
 export const checkIsNewUser = createServerFn({ method: "GET" }).handler(async () => {
   const headers = getRequestHeaders();
-  const session = await useSignUpSession();
 
   // Get current session to check user ID
   const authSession = await auth.api.getSession({ headers });
@@ -62,13 +61,15 @@ export const checkIsNewUser = createServerFn({ method: "GET" }).handler(async ()
 
   if (isNewUser) {
     // Set up sign-up session for the new social user
-    await session.update({
-      state: "social-sign-on",
-      createdUserId: userId,
-      accountData: {
-        email: userEmail,
-        firstName: userName.split(" ")[0] || "",
-        lastName: userName.split(" ").slice(1).join(" ") || "",
+    await updateSignUpSession({
+      data: {
+        state: "social-sign-on",
+        createdUserId: userId,
+        accountData: {
+          email: userEmail,
+          firstName: userName.split(" ")[0] || "",
+          lastName: userName.split(" ").slice(1).join(" ") || "",
+        },
       },
     });
   }

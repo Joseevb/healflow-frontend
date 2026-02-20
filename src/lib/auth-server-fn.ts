@@ -7,8 +7,8 @@ import { attempt } from "@/lib/attempt";
 import { auth } from "@/lib/auth";
 import { authMiddleware } from "@/lib/auth-middleware";
 import { signUpSession } from "@/schemas/sign-up-session.schema";
-import { useSignUpSession } from "@/server/session";
 import { UserRegistrationService } from "@/services/user-registration.service";
+import { clearSignUpSession, getSignUpSession, updateSignUpSession } from "@/server/session";
 
 export const getUserId = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
@@ -21,7 +21,7 @@ export const getJwt = createServerFn({ method: "GET" })
 export const createUser = createServerFn({ method: "POST" })
   .inputValidator(signUpSession)
   .handler(async ({ data }) => {
-    const session = await useSignUpSession();
+    const session = await getSignUpSession();
 
     // TODO: Implement this
     async function storeImage(file: File) {
@@ -60,10 +60,12 @@ export const createUser = createServerFn({ method: "POST" })
         }
 
         // Store in session for later provisioning (AFTER payment)
-        await session.update({
-          createdUserId: authResult.user.id,
-          accountData: data.accountData,
-          state: "user-data",
+        await updateSignUpSession({
+          data: {
+            createdUserId: authResult.user.id,
+            accountData: data.accountData,
+            state: "user-data",
+          },
         });
 
         throw redirect({ to: "/auth/sign-up/user-data" });
@@ -75,10 +77,12 @@ export const createUser = createServerFn({ method: "POST" })
           throw redirect({ to: "/auth/sign-up/user-data" });
         }
 
-        await session.update({
-          ...session.data,
-          userData: data.userData,
-          state: "payment-info",
+        await updateSignUpSession({
+          data: {
+            ...session,
+            userData: data.userData,
+            state: "payment-info",
+          },
         });
 
         throw redirect({ to: "/auth/sign-up/payment-info" });
@@ -86,7 +90,7 @@ export const createUser = createServerFn({ method: "POST" })
 
       // Payment success: NOW provision to backend API
       case "payment-info": {
-        const { createdUserId, accountData, userData } = session.data;
+        const { createdUserId, accountData, userData } = session;
 
         if (!createdUserId || !accountData || !userData) {
           throw redirect({ to: "/auth/sign-up" });
@@ -118,7 +122,7 @@ export const createUser = createServerFn({ method: "POST" })
         }
 
         // Success! Clear session and go to dashboard
-        await session.clear();
+        await clearSignUpSession();
         throw redirect({ to: "/dashboard" });
       }
 
@@ -129,7 +133,4 @@ export const createUser = createServerFn({ method: "POST" })
 
 export const getSessionData = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
-  .handler(async () => {
-    const session = await useSignUpSession();
-    return session.data;
-  });
+  .handler(async () => await getSignUpSession());

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { RoutePath } from "@/types/routes";
+import type { RoutePath } from "@/types/routes";
 
 type UserMenuItemBase = {
   label: string;
