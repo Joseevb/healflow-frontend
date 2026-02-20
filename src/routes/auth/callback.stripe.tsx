@@ -9,21 +9,21 @@ export const Route = createFileRoute("/auth/callback/stripe")({
   component: () => null,
   loader: async () => {
     const { createdUserId, accountData, userData } = await getSignUpSession();
-    if (!createdUserId || !accountData || !userData) {
-      throw redirect({ to: "/auth/sign-up" });
-    }
+    // if (!createdUserId || !accountData || !userData) {
+    //   throw redirect({ to: "/auth/sign-up" });
+    // }
 
     // Provision to backend API
     const { error: provisionError } = await attempt(async () => {
       const service = new UserRegistrationService(apiKeyConfig);
       await Effect.runPromise(
         service.post({
-          user_id: createdUserId,
-          email: accountData.email,
-          specialist_id: userData.primaryCareSpecialist,
-          first_name: accountData.firstName,
-          last_name: accountData.lastName,
-          phone: userData.phoneNumber,
+          user_id: createdUserId!,
+          email: accountData!.email,
+          specialist_id: userData!.primaryCareSpecialist,
+          first_name: accountData!.firstName,
+          last_name: accountData!.lastName,
+          phone: userData!.phoneNumber,
         }),
       );
     });
