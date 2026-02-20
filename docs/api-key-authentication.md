@@ -67,7 +67,7 @@ The following endpoints require API key authentication:
 API_SERVICE_KEY=your-api-service-key-here
 
 # API Key Header Name (optional, defaults to X-API-KEY)
-API_KEY_HEADER_NAME=X-API-KEY
+API_HEADER_NAME=X-API-KEY
 ```
 
 ### Backend Configuration

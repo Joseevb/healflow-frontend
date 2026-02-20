@@ -9,7 +9,7 @@ function requiresApiKey(url: string): boolean {
 
 export const configureApiKeyInterceptor = createServerOnlyFn(() => {
   const apiKey = process.env.API_SERVICE_KEY;
-  const headerName = process.env.API_KEY_HEADER_NAME || "X-API-KEY";
+  const headerName = process.env.API_HEADER_NAME || "X-API-KEY";
 
   if (!apiKey) {
     console.warn("[API Client] API_SERVICE_KEY not found in environment");

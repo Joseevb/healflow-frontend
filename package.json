@@ -18,7 +18,7 @@
     "db:seed": "bun run src/db/seed.ts",
     "db:studio": "drizzle-kit studio",
     "db:generate": "bunx drizzle-kit generate --dialect sqlite --schema ./src/db/schemas",
-    "db:migrate": "bun run db:generate && rm -f ./dev.sqlite && bun run src/db/migrate.ts",
+    "db:migrate": "bun run db:generate && rm -f ${DATABASE_URL} && bun run src/db/migrate.ts",
     "cn:add": "bunx --bun shadcn@latest add",
     "openapi-ts": "rm -rf ./src/client && bun run ./src/heyapi.code-gen.ts",
     "auth:generate": "bunx --bun @better-auth/cli generate --output=src/db/schemas/auth-schema.ts --config=./src/lib/auth.ts -y",

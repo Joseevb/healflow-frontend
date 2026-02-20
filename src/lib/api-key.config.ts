@@ -20,8 +20,8 @@ export const apiKeyConfig: ApiKeyConfig = {
     }),
   getHeaderName: () =>
     Effect.gen(function* () {
-      if (process.env.API_KEY_HEADER_NAME) {
-        return yield* Effect.succeed(process.env.API_KEY_HEADER_NAME);
+      if (process.env.API_HEADER_NAME) {
+        return yield* Effect.succeed(process.env.API_HEADER_NAME);
       }
 
       return yield* Effect.fail(new ApiKeyHeaderNotSetError());
