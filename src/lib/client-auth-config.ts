@@ -1,8 +1,4 @@
 import { client } from "@/client/client.gen";
-import { configureApiKeyInterceptor } from "@/lib/api-client";
-
-// Configure API key interceptor for server-side requests
-configureApiKeyInterceptor();
 
 // Token storage - can be set before requests are made
 let cachedToken: string | undefined = undefined;
