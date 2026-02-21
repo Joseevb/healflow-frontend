@@ -20,8 +20,13 @@ const searchParams = z.object({
 export const Route = createFileRoute("/auth/sign-up/payment-info")({
   validateSearch: searchParams,
   component: RouteComponent,
-  loader: async () => {
+  loader: async ({ context }) => {
     const sessionData = await getSessionData();
+
+    // If user is authenticated, they don't need to be on payment page
+    if (context.user.id) {
+      throw redirect({ to: "/dashboard" });
+    }
 
     if (sessionData.state === "success") {
       throw redirect({ to: "/dashboard" });

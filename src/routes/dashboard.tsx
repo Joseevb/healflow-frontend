@@ -15,7 +15,7 @@ import type { SidebarItems } from "@/components/app-sidebar";
 import type { RoutePath } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { signOut } from "@/lib/auth-client";
+import { authClient, signOut } from "@/lib/auth-client";
 import { getJwtToken, getServerSession } from "@/server/auth";
 import { setAuthToken } from "@/lib/client-auth-config";
 import { Button } from "@/components/ui/button";
@@ -45,30 +45,41 @@ function getInitials(name: string | null | undefined): string {
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
-    // Fetch session and JWT token in parallel
-    const [sessionData, jwtToken] = await Promise.all([getServerSession(), getJwtToken()]);
+    const { data: session } = await authClient.getSession();
 
-    console.log("[dashboard] Session check:", sessionData ? "Session exists" : "No session");
-
-    if (!sessionData?.session) {
-      console.warn("[dashboard] No active session found, redirecting to auth");
-      throw redirect({
-        to: "/auth",
-      });
-    }
-
-    // Set JWT token for API client interceptor BEFORE any child route loaders run
-    if (jwtToken) {
-      setAuthToken(jwtToken);
-      console.log("[dashboard] JWT token set for API requests");
-    } else {
-      console.warn("[dashboard] No JWT token available");
+    if (!session?.session) {
+      throw redirect({ to: "/auth" });
     }
 
     return {
       hideHeader: true,
-      user: sessionData.user,
+      user: session.user,
     };
+
+    // // Fetch session and JWT token in parallel
+    // const [sessionData, jwtToken] = await Promise.all([getServerSession(), getJwtToken()]);
+
+    // console.log("[dashboard] Session check:", sessionData ? "Session exists" : "No session");
+
+    // if (!sessionData?.session) {
+    //   console.warn("[dashboard] No active session found, redirecting to auth");
+    //   throw redirect({
+    //     to: "/auth",
+    //   });
+    // }
+
+    // // Set JWT token for API client interceptor BEFORE any child route loaders run
+    // if (jwtToken) {
+    //   setAuthToken(jwtToken);
+    //   console.log("[dashboard] JWT token set for API requests");
+    // } else {
+    //   console.warn("[dashboard] No JWT token available");
+    // }
+
+    // return {
+    //   hideHeader: true,
+    //   user: sessionData.user,
+    // };
   },
   component: DashboardLayout,
 });
