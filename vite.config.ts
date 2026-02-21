@@ -24,7 +24,7 @@ const config = defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tailwindcss(),
-    isDev ? nitro({ preset: "bun" }) : netlify(),
+    isDev ? nitro({ preset: "bun" }) : nitro(),
     viteReact({
       babel: {
         plugins: ["babel-plugin-react-compiler"],
