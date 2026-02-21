@@ -82,7 +82,6 @@ export default function SignUp() {
         email: data.email,
         password: data.password,
         name: `${data.firstName} ${data.lastName}`,
-        callbackURL: "/auth/sign-up/user-data",
       });
 
       if (error) {
