@@ -15,8 +15,7 @@ import type { SidebarItems } from "@/components/app-sidebar";
 import type { RoutePath } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { signOut } from "@/lib/auth-client";
-import { getServerSession } from "@/server/auth";
+import { authClient, signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/providers/theme-provider";
-import { auth } from "@/lib/auth";
 
 /**
  * Generate user initials from name
@@ -45,15 +43,15 @@ function getInitials(name: string | null | undefined): string {
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
-    const session = await auth.api.getSession();
+    const session = await authClient.getSession();
 
-    if (!session?.session) {
+    if (!session.data?.session) {
       throw redirect({ to: "/auth" });
     }
 
     return {
       hideHeader: true,
-      user: session.user,
+      user: session.data.user,
     };
 
     // // Fetch session and JWT token in parallel
