@@ -7,7 +7,8 @@ import { clearSignUpSession, getSignUpSession } from "@/server/session";
 
 export const Route = createFileRoute("/auth/callback/stripe")({
   component: () => null,
-  loader: async () => {
+  loader: async (ctx) => {
+    console.log("STRIPE CALLBACK", ctx);
     const { createdUserId, accountData, userData } = await getSignUpSession();
     // if (!createdUserId || !accountData || !userData) {
     //   throw redirect({ to: "/auth/sign-up" });

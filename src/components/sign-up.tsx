@@ -18,6 +18,8 @@ import { Separator } from "@/components/ui/separator";
 import { useAppForm } from "@/hooks/form-context";
 import { createUser } from "@/lib/auth-server-fn";
 import { signUpSchema } from "@/schemas/sing-up.schema";
+import { toast } from "sonner";
+import { signUp } from "@/lib/auth-client";
 
 const fieldConfigs: FieldConfigs<SignUpSchema> = {
   firstName: {
@@ -75,13 +77,28 @@ export default function SignUp() {
       profileImage: undefined,
     } as SignUpSchema,
     validators: { onSubmit: signUpSchema },
-    onSubmit: async ({ value: data }) =>
+    onSubmit: async ({ value: data }) => {
+      const { data: result, error } = await signUp.email({
+        email: data.email,
+        password: data.password,
+        name: `${data.firstName} ${data.lastName}`,
+        callbackURL: "/auth/sign-up/user-data",
+      });
+
+      if (error) {
+        toast.error(error.message || "Failed to create account");
+        return;
+      }
+
+      // Store additional data in session for later
       await createUserFn({
         data: {
           accountData: data,
-          state: "email",
+          createdUserId: result.user.id,
+          state: "user-data",
         },
-      }),
+      });
+    },
   });
 
   return (
