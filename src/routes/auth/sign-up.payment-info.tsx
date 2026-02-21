@@ -24,7 +24,7 @@ export const Route = createFileRoute("/auth/sign-up/payment-info")({
     const sessionData = await getSessionData();
 
     // If user is authenticated, they don't need to be on payment page
-    if (context.user.id) {
+    if (context.userId) {
       throw redirect({ to: "/dashboard" });
     }
 

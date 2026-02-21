@@ -20,7 +20,7 @@ export const Route = createFileRoute("/auth/sign-up/user-data")({
     const sessionData = await getSessionData();
 
     // If already authenticated, send to dashboard
-    if (context.user.id) {
+    if (context.userId) {
       throw redirect({
         to: "/dashboard",
       });
