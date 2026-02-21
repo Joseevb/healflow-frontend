@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { useEffect } from "react";
 import * as z from "zod";
-import { authClient, getSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,12 +21,6 @@ export const Route = createFileRoute("/auth/sign-up/payment-info")({
   validateSearch: searchParams,
   component: RouteComponent,
   loader: async () => {
-    // Check if user is already authenticated via Better Auth
-    const session = await getSession();
-    if (session && session.data?.user) {
-      throw redirect({ to: "/dashboard" });
-    }
-
     const sessionData = await getSessionData();
 
     if (sessionData.state === "success") {

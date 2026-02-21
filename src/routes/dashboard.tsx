@@ -16,8 +16,6 @@ import type { RoutePath } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { authClient, signOut } from "@/lib/auth-client";
-import { getJwtToken, getServerSession } from "@/server/auth";
-import { setAuthToken } from "@/lib/client-auth-config";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
