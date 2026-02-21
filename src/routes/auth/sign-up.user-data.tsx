@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Suspense } from "react";
+import { getSession } from "@/lib/auth-client";
 import type { FieldConfigs } from "@/types/form-types";
 import type { UserDataSchema } from "@/types/auth";
 import type { SpecialistResponse } from "@/client";
@@ -17,14 +18,15 @@ import { dynamicFormFactory } from "@/components/dynamic-form";
 export const Route = createFileRoute("/auth/sign-up/user-data")({
   component: RouteComponent,
   loader: async ({ context }) => {
-    const sessionData = await getSessionData();
-
-    // If already authenticated, send to dashboard
-    if (context.userId) {
+    // Check if user is already authenticated via Better Auth
+    const session = await getSession();
+    if (session && session.data?.user) {
       throw redirect({
         to: "/dashboard",
       });
     }
+
+    const sessionData = await getSessionData();
 
     if (sessionData.state === "success") {
       throw redirect({
