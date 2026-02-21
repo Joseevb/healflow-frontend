@@ -2,7 +2,7 @@ import { createClient } from "@hey-api/openapi-ts";
 import { Console, Effect } from "effect";
 
 const API_DOCS_URL = process.env.API_DOCS_URL || "http://localhost:8080/v3/api-docs";
-const TIMEOUT_MS = 120_000;
+const TIMEOUT_MS = 300_00;
 
 const fetchApiDocs = Effect.gen(function* () {
   yield* Console.log(`Fetching API docs from ${API_DOCS_URL}...`);

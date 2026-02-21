@@ -18,7 +18,6 @@ export type SocialSignOnProvider = {
 export const signUpState = [
   "email",
   "user-data",
-  "payment-info",
   "success",
   "social-sign-on",
   "profile-update",
