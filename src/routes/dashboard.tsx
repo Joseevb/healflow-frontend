@@ -15,7 +15,8 @@ import type { SidebarItems } from "@/components/app-sidebar";
 import type { RoutePath } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { authClient, signOut } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
+import { getServerSession } from "@/server/auth";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -43,7 +44,7 @@ function getInitials(name: string | null | undefined): string {
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
-    const { data: session } = await authClient.getSession();
+    const session = await getServerSession();
 
     if (!session?.session) {
       throw redirect({ to: "/auth" });
