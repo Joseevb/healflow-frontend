@@ -89,42 +89,42 @@ export const createUser = createServerFn({ method: "POST" })
       }
 
       // Payment success: NOW provision to backend API
-      case "payment-info": {
-        const { createdUserId, accountData, userData } = session;
+      // case "payment-info": {
+      //   const { createdUserId, accountData, userData } = session;
 
-        if (!createdUserId || !accountData || !userData) {
-          throw redirect({ to: "/auth/sign-up" });
-        }
+      //   if (!createdUserId || !accountData || !userData) {
+      //     throw redirect({ to: "/auth/sign-up" });
+      //   }
 
-        if (!data.isPaymentSuccessfull) {
-          throw redirect({ to: "/auth/sign-up/payment-info" });
-        }
+      //   if (!data.isPaymentSuccessfull) {
+      //     throw redirect({ to: "/auth/sign-up/payment-info" });
+      //   }
 
-        // 🎯 PROVISION TO BACKEND API HERE (after payment!)
-        const { error: provisionError } = await attempt(async () => {
-          const service = new UserRegistrationService(apiKeyConfig);
-          await Effect.runPromise(
-            service.post({
-              user_id: createdUserId,
-              email: accountData.email,
-              specialist_id: userData.primaryCareSpecialist,
-              first_name: accountData.firstName,
-              last_name: accountData.lastName,
-              phone: userData.phoneNumber,
-            }),
-          );
-        });
+      //   // 🎯 PROVISION TO BACKEND API HERE (after payment!)
+      //   const { error: provisionError } = await attempt(async () => {
+      //     const service = new UserRegistrationService(apiKeyConfig);
+      //     await Effect.runPromise(
+      //       service.post({
+      //         user_id: createdUserId,
+      //         email: accountData.email,
+      //         specialist_id: userData.primaryCareSpecialist,
+      //         first_name: accountData.firstName,
+      //         last_name: accountData.lastName,
+      //         phone: userData.phoneNumber,
+      //       }),
+      //     );
+      //   });
 
-        if (provisionError) {
-          console.error("Provisioning failed:", provisionError);
-          // Don't delete the user — they paid! Log for manual fix
-          throw new Error("Account created but setup incomplete. Contact support.");
-        }
+      //   if (provisionError) {
+      //     console.error("Provisioning failed:", provisionError);
+      //     // Don't delete the user — they paid! Log for manual fix
+      //     throw new Error("Account created but setup incomplete. Contact support.");
+      //   }
 
-        // Success! Clear session and go to dashboard
-        await clearSignUpSession();
-        throw redirect({ to: "/dashboard" });
-      }
+      //   // Success! Clear session and go to dashboard
+      //   await clearSignUpSession();
+      //   throw redirect({ to: "/dashboard" });
+      // }
 
       default:
         throw redirect({ to: "/auth/sign-up" });
