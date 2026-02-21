@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/providers/theme-provider";
+import { auth } from "@/lib/auth";
 
 /**
  * Generate user initials from name
@@ -44,7 +45,7 @@ function getInitials(name: string | null | undefined): string {
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
-    const session = await getServerSession();
+    const session = await auth.api.getSession();
 
     if (!session?.session) {
       throw redirect({ to: "/auth" });
