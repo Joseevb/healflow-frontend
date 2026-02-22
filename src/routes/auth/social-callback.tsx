@@ -27,6 +27,7 @@ export const Route = createFileRoute("/auth/social-callback")({
             data: {
               createdUserId: user.id,
               accountData: user,
+              state: "user-data",
             },
           });
           throw redirect({ to: "/auth/sign-up/user-data" });
