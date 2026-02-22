@@ -10,6 +10,12 @@ export const Route = createFileRoute("/auth")({
 
   beforeLoad: async () => {
     const session = await getSession();
+    return {
+      session,
+    };
+  },
+  loader: ({ context }) => {
+    const session = context.session;
 
     if (session && !location.pathname.startsWith("/auth/sign-up")) {
       throw redirect({ to: "/dashboard" });
