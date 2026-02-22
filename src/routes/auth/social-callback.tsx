@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { updateSignUpSession } from "@/server/session";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/social-callback")({
@@ -20,9 +21,14 @@ export const Route = createFileRoute("/auth/social-callback")({
 
         console.log("[social-callback] isNewUser:", isNewUser);
 
-        // 3. Redirect accordingly
         if (isNewUser) {
           console.log("[social-callback] Redirecting to sign-up forms");
+          await updateSignUpSession({
+            data: {
+              createdUserId: user.id,
+              accountData: user,
+            },
+          });
           throw redirect({ to: "/auth/sign-up/user-data" });
         } else {
           console.log("[social-callback] Redirecting to dashboard");

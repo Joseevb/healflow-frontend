@@ -17,7 +17,6 @@ export const signUpSession = z.object({
       profileImageRef: z.string().optional(),
     })
     .optional(),
-  socialSignOnData: z.any().optional(),
   userData: userDataSchema.optional(),
   state: z.enum(signUpState).optional(),
   createdUserId: z.string().optional(),
@@ -32,7 +31,6 @@ export const serializableSignUpSession = z.object({
       profileImageRef: z.string().optional(),
     })
     .optional(),
-  socialSignOnData: z.any().optional(),
   userData: userDataSchema.optional(),
   state: z.enum(signUpState).optional(),
   createdUserId: z.string().optional(),
