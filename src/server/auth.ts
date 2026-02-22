@@ -19,65 +19,73 @@ export const checkIsNewUser = createServerFn({ method: "GET" }).handler(async ()
   // Get current session to check user ID
   const authSession = await auth.api.getSession({ headers });
 
-  // authSession is null if no session, otherwise has user
-  if (authSession === null) {
-    // No authenticated user
+  // No authenticated user means not a new user in our system
+  if (!authSession?.user?.id) {
     return { isNewUser: false };
   }
 
-  const userId = authSession.user.id;
-  const userName = authSession.user.name || "";
-  const userEmail = authSession.user.email;
+  const { id: userId, name = "", email } = authSession.user;
 
-  // Check if user exists in the backend API
+  // Validate user exists in backend API
   const { data: validationResult, error: validationError } = await attempt(async () => {
     const apiKey = await Effect.runPromise(apiKeyConfig.getKey());
     const headerName = await Effect.runPromise(apiKeyConfig.getHeaderName());
 
     return await validateUser({
-      body: { ids: [...userId] },
+      body: { ids: [userId] },
       headers: {
         [headerName]: apiKey,
       },
     });
   });
 
-  // Determine if user is new (not provisioned in backend)
-  let isNewUser = false;
-
-  if (validationError) {
-    // Validation call failed - assume new user
-    console.log("[checkIsNewUser] Validation call failed, assuming new user");
-    isNewUser = true;
-  } else if (validationResult.response.status === 400) {
-    // 400 means user ID not found in backend
-    console.log("[checkIsNewUser] User not found in backend (400)");
-    isNewUser = true;
-  } else if (validationResult.response.status !== 200) {
-    // Any non-200/non-400 status - assume new user to be safe
-    console.log("[checkIsNewUser] Unexpected status:", validationResult.response.status);
-    isNewUser = true;
-  }
+  // Determine if user is new based on validation response
+  const isNewUser = determineIfNewUser(validationError, validationResult);
 
   if (isNewUser) {
-    // Set up sign-up session for the new social user
+    // Set up sign-up session for new social user
     await updateSignUpSession({
       data: {
         state: "social-sign-on",
         createdUserId: userId,
         accountData: {
-          email: userEmail,
-          firstName: userName.split(" ")[0] || "",
-          lastName: userName.split(" ").slice(1).join(" ") || "",
+          email,
+          firstName: name.split(" ")[0] ?? "",
+          lastName: name.split(" ").slice(1).join(" ") ?? "",
         },
       },
     });
   }
 
-  console.log("[checkIsNewUser] User:", userId, "isNewUser:", isNewUser);
+  console.log("[checkIsNewUser]", { userId, isNewUser });
 
   return { isNewUser };
 });
+
+/**
+ * Determines if a user is new based on backend validation response
+ */
+function determineIfNewUser(validationError: unknown, validationResult: any): boolean {
+  if (validationError) {
+    console.warn("[checkIsNewUser] Validation call failed, assuming new user");
+    return true;
+  }
+
+  const status = validationResult?.response?.status;
+
+  switch (status) {
+    case 200:
+      // User found in backend
+      return false;
+    case 400:
+      // User not found in backend
+      return true;
+    default:
+      // Unexpected status, assume new to be safe
+      console.warn("[checkIsNewUser] Unexpected validation status:", status);
+      return true;
+  }
+}
 
 /**
  * Gets the current user session on the server side.
@@ -90,7 +98,11 @@ export const getServerSession = createServerFn({ method: "GET" }).handler(async 
     headers,
   });
 
-  console.log("[getServerSession] Session data:", JSON.stringify(session, null, 2));
+  if (session) {
+    console.log("[getServerSession] User authenticated:", { userId: session.user.id });
+  } else {
+    console.log("[getServerSession] No active session");
+  }
 
   return session;
 });
@@ -103,19 +115,19 @@ export const getJwtToken = createServerFn({ method: "GET" }).handler(async () =>
   const headers = getRequestHeaders();
 
   try {
-    console.log("[getJwtToken] Requesting JWT token...");
-
     const tokenResponse = await auth.api.getToken({
       headers,
     });
 
-    console.log("[getJwtToken] Token response:", {
-      hasToken: !!tokenResponse.token,
-    });
+    if (!tokenResponse.token) {
+      console.warn("[getJwtToken] No token in response");
+      return undefined;
+    }
 
+    console.log("[getJwtToken] Token obtained successfully");
     return tokenResponse.token;
   } catch (error) {
-    console.error("[getJwtToken] Error getting JWT token:", error);
+    console.error("[getJwtToken] Failed to get JWT token:", error);
     return undefined;
   }
 });
@@ -125,16 +137,22 @@ export const getJwtToken = createServerFn({ method: "GET" }).handler(async () =>
  * Validates all user IDs and removes stale users that don't exist in the backend.
  */
 export const syncUsers = createServerFn({ method: "GET" }).handler(async () => {
-  const syncService = new UserSyncService(apiKeyConfig);
+  try {
+    const syncService = new UserSyncService(apiKeyConfig);
 
-  const result = await Effect.runPromise(
-    syncService.sync().pipe(
-      Effect.catchAll((err) => {
-        console.error("[UserSync] Sync failed:", err.message);
-        return Effect.succeed({ validated: 0, deleted: 0, error: err.message });
-      }),
-    ),
-  );
+    const result = await Effect.runPromise(
+      syncService.sync().pipe(
+        Effect.catchAll((err) => {
+          console.error("[syncUsers] Sync failed:", err.message);
+          return Effect.succeed({ validated: 0, deleted: 0, error: err.message });
+        }),
+      ),
+    );
 
-  return result;
+    console.log("[syncUsers] Completed:", result);
+    return result;
+  } catch (error) {
+    console.error("[syncUsers] Unexpected error:", error);
+    return { validated: 0, deleted: 0, error: "Unexpected error during sync" };
+  }
 });
