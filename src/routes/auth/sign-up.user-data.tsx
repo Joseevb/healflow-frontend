@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { userDataSchema } from "@/schemas/user-data.schema";
 import { getAvailableSpecialistsOptions } from "@/client/@tanstack/react-query.gen";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { createUser, getSessionData } from "@/lib/auth-server-fn";
+import { createUser, getSessionData } from "@/lib/auth-session";
 import { useAppForm } from "@/hooks/form-context";
 import { dynamicFormFactory } from "@/components/dynamic-form";
 

@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { getSessionData } from "@/lib/auth-server-fn";
+import { getSessionData } from "@/lib/auth-session";
 import { createUrl } from "@/lib/utils";
 
 const searchParams = z.object({

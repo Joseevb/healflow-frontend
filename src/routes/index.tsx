@@ -5,7 +5,7 @@ import { PatientFeatures } from "@/components/patient-features";
 import { ProviderFeatures } from "@/components/provider-features";
 import { TrustIndicators } from "@/components/trust-indicators";
 import { CTASection } from "@/components/cta-section";
-import { getSessionData, getUserId } from "@/lib/auth-server-fn";
+import { getSessionData, getUserId } from "@/lib/auth-session";
 
 export const Route = createFileRoute("/")({
   component: App,

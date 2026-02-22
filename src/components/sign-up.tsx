@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAppForm } from "@/hooks/form-context";
-import { createUser } from "@/lib/auth-server-fn";
+import { createUser } from "@/lib/auth-session";
 import { signUpSchema } from "@/schemas/sing-up.schema";
 import { toast } from "sonner";
 import { signUp } from "@/lib/auth-client";

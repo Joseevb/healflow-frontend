@@ -14,7 +14,7 @@ import {
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import type { LucideIcon } from "lucide-react";
 import type { AppointmentResponse, HealthMetricResponse } from "@/client";
-import { getSessionData } from "@/lib/auth-server-fn";
+import { getSessionData } from "@/lib/auth-session";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +32,6 @@ import {
 export const Route = createFileRoute("/dashboard/")({
   component: RouteComponent,
   loader: async ({ context }) => {
-    // JWT token is already set by parent /dashboard route's beforeLoad
     const sessionData = await getSessionData();
 
     if (sessionData.createdUserId && sessionData.state && sessionData.state !== "success") {

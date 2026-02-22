@@ -2,18 +2,17 @@ import { Link, Outlet, createFileRoute, redirect } from "@tanstack/react-router"
 import { Image } from "@unpic/react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { getUserId } from "@/lib/auth-server-fn";
+import { getSession } from "@/lib/auth-session";
 
 export const Route = createFileRoute("/auth")({
   component: RouteComponent,
   context: ({ context }) => ({ ...context, hideHeader: true }),
+
   beforeLoad: async () => {
-    const userId = await getUserId();
-    return { userId };
-  },
-  loader: ({ context, location }) => {
-    if (context.userId && !location.pathname.startsWith("/auth/sign-up")) {
-      throw redirect({ to: "/dashboard" });
+    const session = await getSession();
+
+    if (!session && !location.pathname.startsWith("/auth/sign-up")) {
+      throw redirect({ to: "/auth" });
     }
   },
 });

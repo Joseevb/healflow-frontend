@@ -15,7 +15,7 @@ import type { SidebarItems } from "@/components/app-sidebar";
 import type { RoutePath } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { authClient, signOut } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/providers/theme-provider";
+import { getSession } from "@/lib/auth-session";
 
 /**
  * Generate user initials from name
@@ -43,42 +44,16 @@ function getInitials(name: string | null | undefined): string {
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
-    const session = await authClient.getSession();
-    console.log(session);
+    const session = await getSession();
 
-    if (!session.data?.user) {
+    if (!session) {
       throw redirect({ to: "/auth" });
     }
 
     return {
       hideHeader: true,
-      user: session.data.user,
+      user: session.user,
     };
-
-    // // Fetch session and JWT token in parallel
-    // const [sessionData, jwtToken] = await Promise.all([getServerSession(), getJwtToken()]);
-
-    // console.log("[dashboard] Session check:", sessionData ? "Session exists" : "No session");
-
-    // if (!sessionData?.session) {
-    //   console.warn("[dashboard] No active session found, redirecting to auth");
-    //   throw redirect({
-    //     to: "/auth",
-    //   });
-    // }
-
-    // // Set JWT token for API client interceptor BEFORE any child route loaders run
-    // if (jwtToken) {
-    //   setAuthToken(jwtToken);
-    //   console.log("[dashboard] JWT token set for API requests");
-    // } else {
-    //   console.warn("[dashboard] No JWT token available");
-    // }
-
-    // return {
-    //   hideHeader: true,
-    //   user: sessionData.user,
-    // };
   },
   component: DashboardLayout,
 });
