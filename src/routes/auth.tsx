@@ -12,7 +12,7 @@ export const Route = createFileRoute("/auth")({
     const session = await getSession();
 
     if (!session && !location.pathname.startsWith("/auth/sign-up")) {
-      throw redirect({ to: "/auth" });
+      throw redirect({ to: "/dashboard" });
     }
   },
 });
