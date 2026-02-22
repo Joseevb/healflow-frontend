@@ -20,6 +20,7 @@ export const Route = createFileRoute("/auth/social-callback")({
 
         console.log("[social-callback] isNewUser:", isNewUser);
 
+        // 3. Redirect accordingly
         if (isNewUser) {
           console.log("[social-callback] Redirecting to sign-up forms");
           throw redirect({ to: "/auth/sign-up/user-data" });
