@@ -1,11 +1,22 @@
-import { checkIsNewUser } from "@/server/auth";
+import { auth } from "@/lib/auth";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/auth/social-callback/$userId")({
+export const Route = createFileRoute("/auth/social-callback")({
   server: {
     handlers: {
-      GET: async () => {
-        const { isNewUser } = await checkIsNewUser();
+      GET: async ({ request }) => {
+        const session = await auth.api.getSession({
+          headers: request.headers,
+        });
+
+        if (!session) {
+          throw redirect({ to: "/auth" });
+        }
+
+        const { user } = session;
+
+        const accountAgeInMs = Date.now() - new Date(user.createdAt).getTime();
+        const isNewUser = accountAgeInMs < 15000;
 
         console.log("[social-callback] isNewUser:", isNewUser);
 
