@@ -38,7 +38,9 @@ export const auth = betterAuth({
       jwks: { keyPairConfig: { alg: "RS256" } },
     }),
     openAPI(),
-    admin(),
+    admin({
+      defaultRole: "client",
+    }),
     stripe({
       stripeClient,
       stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,

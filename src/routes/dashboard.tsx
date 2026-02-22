@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/providers/theme-provider";
+<<<<<<< HEAD
 import { getJwt, getSession } from "@/lib/auth-session";
 import { setAuthToken } from "@/lib/client-auth-config";
 
@@ -42,6 +43,9 @@ function getInitials(name: string | null | undefined): string {
 
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
+=======
+import { getInitials } from "@/lib/utils";
+>>>>>>> 60f66db (feat: refactor a function and added role to internal paths)
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {

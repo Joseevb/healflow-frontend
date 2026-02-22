@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
+import { Route as InternalRouteImport } from './routes/internal'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +27,16 @@ import { Route as AuthSignUpPaymentInfoRouteImport } from './routes/auth/sign-up
 import { Route as AuthCallbackStripeRouteImport } from './routes/auth/callback.stripe'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
 
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalRoute = InternalRouteImport.update({
+  id: '/internal',
+  path: '/internal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -105,6 +117,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
+  '/internal': typeof InternalRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/auth/social-callback': typeof AuthSocialCallbackRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/health-metrics': typeof DashboardHealthMetricsRoute
@@ -120,6 +134,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/internal': typeof InternalRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/auth/social-callback': typeof AuthSocialCallbackRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/health-metrics': typeof DashboardHealthMetricsRoute
@@ -138,6 +154,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
+  '/internal': typeof InternalRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/auth/social-callback': typeof AuthSocialCallbackRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/health-metrics': typeof DashboardHealthMetricsRoute
@@ -157,6 +175,8 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/internal'
+    | '/unauthorized'
     | '/auth/social-callback'
     | '/dashboard/appointments'
     | '/dashboard/health-metrics'
@@ -172,6 +192,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/internal'
+    | '/unauthorized'
     | '/auth/social-callback'
     | '/dashboard/appointments'
     | '/dashboard/health-metrics'
@@ -189,6 +211,8 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/internal'
+    | '/unauthorized'
     | '/auth/social-callback'
     | '/dashboard/appointments'
     | '/dashboard/health-metrics'
@@ -207,11 +231,27 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
+  InternalRoute: typeof InternalRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal': {
+      id: '/internal'
+      path: '/internal'
+      fullPath: '/internal'
+      preLoaderRoute: typeof InternalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -364,6 +404,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
+  InternalRoute: InternalRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
