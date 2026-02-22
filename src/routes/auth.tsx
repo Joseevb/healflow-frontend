@@ -11,7 +11,7 @@ export const Route = createFileRoute("/auth")({
   beforeLoad: async () => {
     const session = await getSession();
 
-    if (!session && !location.pathname.startsWith("/auth/sign-up")) {
+    if (session && !location.pathname.startsWith("/auth/sign-up")) {
       throw redirect({ to: "/dashboard" });
     }
   },
