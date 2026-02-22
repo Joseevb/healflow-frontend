@@ -26,7 +26,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/providers/theme-provider";
-import { getSession } from "@/lib/auth-session";
+import { getJwt, getSession } from "@/lib/auth-session";
+import { setAuthToken } from "@/lib/client-auth-config";
 
 /**
  * Generate user initials from name
@@ -48,6 +49,12 @@ export const Route = createFileRoute("/dashboard")({
 
     if (!session) {
       throw redirect({ to: "/auth" });
+    }
+
+    const jwt = await getJwt();
+
+    if (jwt) {
+      setAuthToken(jwt);
     }
 
     return {
