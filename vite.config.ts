@@ -6,7 +6,6 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
 import { fileURLToPath } from "node:url";
-import netlify from "@netlify/vite-plugin-tanstack-start"; // ← add this
 
 const isDev = process.env.NODE_ENV !== "production";
 

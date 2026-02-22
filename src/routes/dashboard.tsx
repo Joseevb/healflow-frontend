@@ -44,8 +44,9 @@ function getInitials(name: string | null | undefined): string {
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
     const session = await authClient.getSession();
+    console.log(session);
 
-    if (!session.data?.session) {
+    if (!session.data?.user) {
       throw redirect({ to: "/auth" });
     }
 
