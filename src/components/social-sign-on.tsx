@@ -32,13 +32,21 @@ export default function SocialSignOn({ isLoading, setIsLoading }: SocialSignOnPr
           className="w-full gap-2"
           disabled={isLoading.type === provider.name && isLoading.loading}
           onClick={async () => {
+            console.log("Button clicked");
             setIsLoading({ loading: true, type: provider.name });
-            provider.onClick?.();
 
-            await signIn.social({
-              provider: provider.name,
-              callbackURL: provider.callbackUrl ?? "/auth/social-callback",
-            });
+            try {
+              console.log("Calling signIn.social...");
+              const result = await signIn.social({
+                provider: provider.name,
+                callbackURL: "/dashboard",
+              });
+              console.log("Result:", result); // This may never log if redirect happens
+            } catch (err) {
+              console.error("Sign in error:", err);
+              setIsLoading({ loading: false, type: provider.name });
+              toast.error((err as Error).message || "Failed to sign in");
+            }
           }}
         >
           <Image src={provider.imageUrl} alt={`${provider.name} logo`} width={16} height={16} />

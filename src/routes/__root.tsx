@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Toaster } from "@/components/ui/sonner";
+// import { createAdminUser } from "@/lib/auth";
 
 function NotFoundComponent() {
   const location = useLocation();
@@ -74,6 +75,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       } catch (error) {
         console.error("[App] User sync failed:", error);
       }
+
+      // await createAdminUser();
     }
   },
   head: () => ({

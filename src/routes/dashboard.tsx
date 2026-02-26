@@ -1,51 +1,13 @@
-import { Link, Outlet, createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import {
-  Activity,
-  Calendar,
-  FileText,
-  Home,
-  LogOut,
-  Moon,
-  Pill,
-  Settings,
-  Sun,
-  User,
-} from "lucide-react";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { Activity, Calendar, FileText, Home, Pill, Settings } from "lucide-react";
 import type { SidebarItems } from "@/components/app-sidebar";
 import type { RoutePath } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { signOut } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/components/providers/theme-provider";
-<<<<<<< HEAD
 import { getJwt, getSession } from "@/lib/auth-session";
 import { setAuthToken } from "@/lib/client-auth-config";
-
-/**
- * Generate user initials from name
- * Handles single names, multiple names, and undefined values safely
- */
-function getInitials(name: string | null | undefined): string {
-  if (!name || typeof name !== "string") return "U";
-
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 0) return "U";
-  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
-}
-=======
-import { getInitials } from "@/lib/utils";
->>>>>>> 60f66db (feat: refactor a function and added role to internal paths)
+import { UserMenu } from "@/components/user-menu";
+import { User } from "@/types/auth";
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
@@ -53,6 +15,10 @@ export const Route = createFileRoute("/dashboard")({
 
     if (!session) {
       throw redirect({ to: "/auth" });
+    }
+
+    if (session.user.role === "admin") {
+      throw redirect({ to: "/admin/dashboard" });
     }
 
     const jwt = await getJwt();
@@ -102,63 +68,9 @@ const sidebarItems = (_baseUrl: RoutePath): SidebarItems => [
   },
 ];
 
-function UserMenu() {
-  const navigate = useNavigate();
-  const { user } = Route.useRouteContext();
-  const { theme, setTheme } = useTheme();
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 px-3 py-6 hover:bg-sidebar-accent"
-        >
-          <div className="flex size-8 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 text-sm font-medium">
-            {getInitials(user.name)}
-          </div>
-          <div className="flex flex-col items-start text-sm">
-            <span className="font-medium">{user.name}</span>
-            <span className="text-xs text-muted-foreground">{user.email}</span>
-          </div>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link to="/dashboard/settings">
-            <User className="size-4 mr-2" />
-            Profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/dashboard/settings">
-            <Settings className="size-4 mr-2" />
-            Settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => setTheme(theme === "light" ? "dark" : "light", e)}>
-          {theme === "light" ? <Moon className="size-4 mr-2" /> : <Sun className="size-4 mr-2" />}
-          {theme === "light" ? "Dark mode" : "Light mode"}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          variant="destructive"
-          onClick={async () => {
-            await signOut();
-            await navigate({ to: "/" });
-          }}
-        >
-          <LogOut className="size-4 mr-2" />
-          Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
 function DashboardLayout() {
+  const { user } = Route.useRouteContext() satisfies { user: User };
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full">
@@ -166,7 +78,7 @@ function DashboardLayout() {
           renderTrigger={true}
           baseUrl="/dashboard"
           items={sidebarItems}
-          footer={<UserMenu />}
+          footer={<UserMenu user={user} />}
         />
         <SidebarInset className="bg-slate-50 dark:bg-slate-900">
           <div className="container mx-auto px-4 py-8 max-w-7xl">

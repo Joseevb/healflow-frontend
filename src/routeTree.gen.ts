@@ -14,6 +14,7 @@ import { Route as InternalRouteImport } from './routes/internal'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InternalIndexRouteImport } from './routes/internal/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
@@ -21,6 +22,7 @@ import { Route as DashboardMedicationsRouteImport } from './routes/dashboard/med
 import { Route as DashboardHealthMetricsRouteImport } from './routes/dashboard/health-metrics'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard/appointments'
 import { Route as AuthSocialCallbackRouteImport } from './routes/auth/social-callback'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up.index'
 import { Route as AuthSignUpUserDataRouteImport } from './routes/auth/sign-up.user-data'
 import { Route as AuthSignUpPaymentInfoRouteImport } from './routes/auth/sign-up.payment-info'
@@ -51,6 +53,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const InternalIndexRoute = InternalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => InternalRoute,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
@@ -87,6 +94,11 @@ const AuthSocialCallbackRoute = AuthSocialCallbackRouteImport.update({
   path: '/social-callback',
   getParentRoute: () => AuthRoute,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
   id: '/sign-up/',
   path: '/sign-up/',
@@ -117,8 +129,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
-  '/internal': typeof InternalRoute
+  '/internal': typeof InternalRouteWithChildren
   '/unauthorized': typeof UnauthorizedRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/auth/social-callback': typeof AuthSocialCallbackRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/health-metrics': typeof DashboardHealthMetricsRoute
@@ -126,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/internal/': typeof InternalIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/callback/stripe': typeof AuthCallbackStripeRoute
   '/auth/sign-up/payment-info': typeof AuthSignUpPaymentInfoRoute
@@ -134,8 +148,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/internal': typeof InternalRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/auth/social-callback': typeof AuthSocialCallbackRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/health-metrics': typeof DashboardHealthMetricsRoute
@@ -143,6 +157,7 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/internal': typeof InternalIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/callback/stripe': typeof AuthCallbackStripeRoute
   '/auth/sign-up/payment-info': typeof AuthSignUpPaymentInfoRoute
@@ -154,8 +169,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
-  '/internal': typeof InternalRoute
+  '/internal': typeof InternalRouteWithChildren
   '/unauthorized': typeof UnauthorizedRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/auth/social-callback': typeof AuthSocialCallbackRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/health-metrics': typeof DashboardHealthMetricsRoute
@@ -163,6 +179,7 @@ export interface FileRoutesById {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/internal/': typeof InternalIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/callback/stripe': typeof AuthCallbackStripeRoute
   '/auth/sign-up/payment-info': typeof AuthSignUpPaymentInfoRoute
@@ -177,6 +194,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/internal'
     | '/unauthorized'
+    | '/admin/dashboard'
     | '/auth/social-callback'
     | '/dashboard/appointments'
     | '/dashboard/health-metrics'
@@ -184,6 +202,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/auth/'
     | '/dashboard/'
+    | '/internal/'
     | '/api/auth/$'
     | '/auth/callback/stripe'
     | '/auth/sign-up/payment-info'
@@ -192,8 +211,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/internal'
     | '/unauthorized'
+    | '/admin/dashboard'
     | '/auth/social-callback'
     | '/dashboard/appointments'
     | '/dashboard/health-metrics'
@@ -201,6 +220,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/auth'
     | '/dashboard'
+    | '/internal'
     | '/api/auth/$'
     | '/auth/callback/stripe'
     | '/auth/sign-up/payment-info'
@@ -213,6 +233,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/internal'
     | '/unauthorized'
+    | '/admin/dashboard'
     | '/auth/social-callback'
     | '/dashboard/appointments'
     | '/dashboard/health-metrics'
@@ -220,6 +241,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/auth/'
     | '/dashboard/'
+    | '/internal/'
     | '/api/auth/$'
     | '/auth/callback/stripe'
     | '/auth/sign-up/payment-info'
@@ -231,8 +253,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
-  InternalRoute: typeof InternalRoute
+  InternalRoute: typeof InternalRouteWithChildren
   UnauthorizedRoute: typeof UnauthorizedRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -272,6 +295,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/internal/': {
+      id: '/internal/'
+      path: '/'
+      fullPath: '/internal/'
+      preLoaderRoute: typeof InternalIndexRouteImport
+      parentRoute: typeof InternalRoute
     }
     '/dashboard/': {
       id: '/dashboard/'
@@ -321,6 +351,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/social-callback'
       preLoaderRoute: typeof AuthSocialCallbackRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/sign-up/': {
       id: '/auth/sign-up/'
@@ -400,12 +437,25 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface InternalRouteChildren {
+  InternalIndexRoute: typeof InternalIndexRoute
+}
+
+const InternalRouteChildren: InternalRouteChildren = {
+  InternalIndexRoute: InternalIndexRoute,
+}
+
+const InternalRouteWithChildren = InternalRoute._addFileChildren(
+  InternalRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
-  InternalRoute: InternalRoute,
+  InternalRoute: InternalRouteWithChildren,
   UnauthorizedRoute: UnauthorizedRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

@@ -20,6 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { signInSchema } from "@/schemas/sing-in.schema";
+import { RoutePath } from "@/types/routes";
 
 const fieldConfigs: FieldConfigs<SignInSchema> = {
   email: {
@@ -36,18 +37,6 @@ const fieldConfigs: FieldConfigs<SignInSchema> = {
     orientation: "horizontal",
   },
 } as const;
-
-const defaultValues: SignInSchema = {
-  email: "test@example.com",
-  password: "",
-  rememberMe: false,
-};
-
-const Form = dynamicFormFactory({
-  fieldConfigs,
-  defaultValues,
-});
-
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState<IsLoading>({
     loading: false,
@@ -67,15 +56,28 @@ export default function SignIn() {
     onSubmit: async ({ value: data }) => {
       await signIn.email({
         ...data,
-        callbackURL: "/dashboard",
         fetchOptions: {
           onError: (err) => setError(err.error.message),
           onRequest: () => setIsLoading({ loading: true, type: "email" }),
           onResponse: () => setIsLoading({ loading: false, type: "email" }),
-          onSuccess: () => (toast.success("Successfully signed in!"), undefined),
+          onSuccess: () => {
+            toast.success("Successfully signed in!");
+          },
         },
+        callbackURL: "/dashboard" satisfies RoutePath,
       });
     },
+  });
+
+  const defaultValues: SignInSchema = {
+    email: "",
+    password: "",
+    rememberMe: false,
+  };
+
+  const Form = dynamicFormFactory({
+    fieldConfigs,
+    defaultValues,
   });
 
   return (
