@@ -4,12 +4,16 @@ import { admin as adminPlugin, createAccessControl, jwt, openAPI } from "better-
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import Stripe from "stripe";
 import { stripe } from "@better-auth/stripe";
+import { Effect } from "effect";
+import { TaggedError } from "effect/Data";
 
 import { v7 } from "uuid";
 import { db } from "@/db";
 
 import * as schema from "@/db/schemas";
 import { adminAc, defaultStatements } from "better-auth/plugins/organization/access";
+import { users } from "@/db/schemas";
+import { eq } from "drizzle-orm";
 
 const statement = {
   specialist: ["create", "read", "update", "delete"],
@@ -97,16 +101,43 @@ export const auth = betterAuth({
   callbackURL: "/dashboard",
 });
 
-// export async function createAdminUser() {
-//   const user = await auth.api.createUser({
-//     body: {
-//       email: "admin@admin.admin",
-//       name: "admin",
-//       password: "admin",
-//       role: "admin",
-//     },
-//   });
+export class CreateAdminUserError extends TaggedError("CreateAdminUserError")<{
+  message: string;
+}> {}
 
-//   console.log("Created admin user:", user.user);
-//   return user.user;
-// }
+const createAdminUser = () =>
+  Effect.tryPromise({
+    try: async () => {
+      const result = await auth.api.signUpEmail({
+        body: {
+          email: "admin@admin.admin",
+          password: "admin12345",
+          name: "admin",
+        },
+      });
+
+      const user = (
+        await db
+          .update(users)
+          .set({ role: "admin" })
+          .where(eq(users.id, result.user.id))
+          .returning()
+      )[0];
+
+      if (user) {
+        console.log("Created admin user:", user);
+        return user;
+      }
+
+      console.log("Admin user already exists");
+      return user;
+    },
+    catch: (err) => {
+      const message = err instanceof Error ? err.message : String(err);
+      return new CreateAdminUserError({ message });
+    },
+  });
+
+export function runCreateAdminUser() {
+  return Effect.runPromise(createAdminUser());
+}

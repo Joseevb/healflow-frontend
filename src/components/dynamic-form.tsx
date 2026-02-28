@@ -253,27 +253,6 @@ export const dynamicFormFactory = <TFormData extends Record<string, unknown>>({
           </form.Form>
         </form.AppForm>
       );
-
-      // return (
-      //   <form.AppForm>
-      //     <form.Form>
-      //       <Card>
-      //         <CardContent className="pt-6">
-      //           <div className="mb-6">
-      //             <FieldTitle className="text-xl">{title}</FieldTitle>
-      //             {description && <FieldDescription>{description}</FieldDescription>}
-      //           </div>
-
-      //           <FormBuilder fieldConfigs={fieldConfigs} form={form as any} />
-      //         </CardContent>
-      //         <CardFooter className="flex gap-3">
-      //           <form.SubscribeButton label="Submit" />
-      //           <form.ResetButton label="Reset" />
-      //         </CardFooter>
-      //       </Card>
-      //     </form.Form>
-      //   </form.AppForm>
-      // );
     },
     defaultValues,
   });

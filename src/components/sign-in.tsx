@@ -20,7 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { signInSchema } from "@/schemas/sing-in.schema";
-import { RoutePath } from "@/types/routes";
+import type { RoutePath } from "@/types/routes";
 
 const fieldConfigs: FieldConfigs<SignInSchema> = {
   email: {

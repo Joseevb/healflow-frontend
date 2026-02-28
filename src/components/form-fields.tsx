@@ -412,7 +412,9 @@ export function FormRoot({
 
   return (
     <form
+      method="POST"
       onSubmit={(e) => {
+        console.log("\n\n\nForm submitted\n\n\n");
         e.preventDefault();
         e.stopPropagation();
         form.handleSubmit();

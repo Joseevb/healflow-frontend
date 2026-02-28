@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { getJwt, getSession } from "@/lib/auth-session";
 import { setAuthToken } from "@/lib/client-auth-config";
 import { UserMenu } from "@/components/user-menu";
-import { User } from "@/types/auth";
+import type { User } from "@/types/auth";
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
