@@ -185,6 +185,7 @@ export class CreateAdminUserError extends TaggedError('CreateAdminUserError')<{
 const createAdminUser = () =>
   Effect.tryPromise({
     try: async () => {
+
       const result = await auth.api.signUpEmail({
         body: {
           email: 'admin@admin.admin',
@@ -206,11 +207,12 @@ const createAdminUser = () =>
         return user
       }
 
-      console.log('Admin user already exists')
+      console.log('Admin user already exists', user)
       return user
     },
     catch: (err) => {
       const message = err instanceof Error ? err.message : String(err)
+      console.error('[createAdminUser] Error:', err)
       return new CreateAdminUserError({ message })
     },
   })

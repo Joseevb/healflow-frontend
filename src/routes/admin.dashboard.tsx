@@ -151,12 +151,12 @@ const columns: Array<ColumnDef<UserTableRow>> = [
     header: 'Is Active',
   },
   {
-    accessorKey: 'stripeCustomerId',
-    header: 'Stripe Customer ID',
-  },
-  {
     accessorKey: 'role',
     header: 'Role',
+  },
+  {
+    accessorKey: 'stripeCustomerId',
+    header: 'Stripe Customer ID',
   },
   {
     accessorKey: 'created_at',

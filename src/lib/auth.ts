@@ -37,7 +37,7 @@ export const auth = betterAuth({
         name: `${profile.given_name} ${profile.family_name}`,
         firstName: profile.given_name,
         lastName: profile.family_name,
-      })
+      }),
     },
   },
   emailAndPassword: { enabled: true, requireEmailVerification: false },
@@ -89,12 +89,12 @@ export const auth = betterAuth({
       firstName: {
         type: 'string',
         defaultValue: '',
-        required: false
+        required: false,
       },
       lastName: {
         type: 'string',
         defaultValue: '',
-        required: false
+        required: false,
       },
     },
   },
