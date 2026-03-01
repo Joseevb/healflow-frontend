@@ -6,7 +6,6 @@ import {
 import { createAuthClient } from 'better-auth/react'
 import { stripeClient } from '@better-auth/stripe/client'
 import { ac, admin, specialist, user } from './auth-roles'
-import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import type { auth } from './auth'
 
 export const authClient = createAuthClient({
@@ -25,7 +24,6 @@ export const authClient = createAuthClient({
     stripeClient({
       subscription: true,
     }),
-    tanstackStartCookies(),
   ],
   callbackURL: '/dashboard',
 })
