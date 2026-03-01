@@ -1,8 +1,8 @@
-import { ChevronRight, ChevronUp } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import type { ReactNode } from "react";
-import type { RoutePath } from "@/types/routes";
+import { ChevronRight, ChevronUp } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+import type { RoutePath } from '@/types/routes'
 import {
   Sidebar,
   SidebarContent,
@@ -16,13 +16,13 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@/components/animate-ui/components/radix/sidebar";
+} from '@/components/animate-ui/components/radix/sidebar'
 import {
   Collapsible,
   CollapsiblePanel,
   CollapsibleTrigger,
-} from "@/components/animate-ui/primitives/base/collapsible";
-import { cn } from "@/lib/utils";
+} from '@/components/animate-ui/primitives/base/collapsible'
+import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,42 +30,42 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 
 type SidebarItemBase = {
-  title: string;
-  icon: React.ComponentType<React.ComponentProps<"svg">>;
-};
+  title: string
+  icon: React.ComponentType<React.ComponentProps<'svg'>>
+}
 
 type SidebarItemLink = SidebarItemBase & {
-  collapsible?: false;
-  url: RoutePath;
-};
+  collapsible?: false
+  url: RoutePath
+}
 
 type SidebarItemCollapsibleChild = {
-  component: React.ReactNode;
-  title: string;
-};
+  component: React.ReactNode
+  title: string
+}
 
 type SidebarItemCollapsible = SidebarItemBase & {
-  collapsible: true;
-  children: Array<SidebarItemCollapsibleChild>;
-};
+  collapsible: true
+  children: Array<SidebarItemCollapsibleChild>
+}
 
-type SidebarItem = SidebarItemLink | SidebarItemCollapsible;
+type SidebarItem = SidebarItemLink | SidebarItemCollapsible
 
-export type SidebarItems = ReadonlyArray<SidebarItem>;
+export type SidebarItems = ReadonlyArray<SidebarItem>
 
 function CollapsibleItem({ item }: { item: SidebarItemCollapsible }) {
-  const { state, isMobile } = useSidebar();
-  const [open, setOpen] = useState(false);
-  const isCollapsed = state === "collapsed" && !isMobile;
+  const { state, isMobile } = useSidebar()
+  const [open, setOpen] = useState(false)
+  const isCollapsed = state === 'collapsed' && !isMobile
 
   useEffect(() => {
     if (isCollapsed) {
-      setOpen(false);
+      setOpen(false)
     }
-  }, [isCollapsed]);
+  }, [isCollapsed])
 
   if (isCollapsed) {
     return (
@@ -78,7 +78,11 @@ function CollapsibleItem({ item }: { item: SidebarItemCollapsible }) {
               <ChevronRight className="ml-auto opacity-50" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="right" align="start" className="w-48 rounded-lg">
+          <DropdownMenuContent
+            side="right"
+            align="start"
+            className="w-48 rounded-lg"
+          >
             <DropdownMenuLabel>{item.title}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {item.children.map((child) => (
@@ -89,7 +93,7 @@ function CollapsibleItem({ item }: { item: SidebarItemCollapsible }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
-    );
+    )
   }
 
   return (
@@ -101,8 +105,8 @@ function CollapsibleItem({ item }: { item: SidebarItemCollapsible }) {
             <span>{item.title}</span>
             <ChevronUp
               className={cn(
-                "ml-auto transition-transform duration-200",
-                open ? "rotate-0" : "rotate-180",
+                'ml-auto transition-transform duration-200',
+                open ? 'rotate-0' : 'rotate-180',
               )}
             />
           </CollapsibleTrigger>
@@ -120,15 +124,15 @@ function CollapsibleItem({ item }: { item: SidebarItemCollapsible }) {
         </SidebarGroupContent>
       </CollapsiblePanel>
     </Collapsible>
-  );
+  )
 }
 
 interface AppSidebarProps {
-  renderTrigger: boolean;
-  baseUrl: RoutePath;
-  footer?: ReactNode;
-  items: (baseUrl: RoutePath) => ReadonlyArray<SidebarItem>;
-  handleTransitionEnd?: (event: React.TransitionEvent<HTMLDivElement>) => void;
+  renderTrigger: boolean
+  baseUrl: RoutePath
+  footer?: ReactNode
+  items: (baseUrl: RoutePath) => ReadonlyArray<SidebarItem>
+  handleTransitionEnd?: (event: React.TransitionEvent<HTMLDivElement>) => void
 }
 
 export function AppSidebar({
@@ -175,5 +179,5 @@ export function AppSidebar({
       {footer && <SidebarFooter className="p-1">{footer}</SidebarFooter>}
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

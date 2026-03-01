@@ -1,15 +1,30 @@
-import { CalendarCheck, FileText, PieChart, Pill, Stethoscope, UserCheck } from "lucide-react";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { H2, Paragraph } from "@/components/ui/typography";
+import {
+  CalendarCheck,
+  FileText,
+  PieChart,
+  Pill,
+  Stethoscope,
+  UserCheck,
+} from 'lucide-react'
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { H2, Paragraph } from '@/components/ui/typography'
 
 export function ProviderFeatures() {
   return (
     <section className="py-20 bg-linear-to-br from-blue-50 via-white to-green-50 dark:from-slate-900 dark:via-blue-950 dark:to-slate-900 -mx-10 ">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
-          <H2 className="text-4xl font-bold mb-4 border-none pb-0">For Healthcare Providers</H2>
+          <H2 className="text-4xl font-bold mb-4 border-none pb-0">
+            For Healthcare Providers
+          </H2>
           <Paragraph className="text-xl text-gray-600 dark:text-slate-300 max-w-2xl mx-auto">
-            Streamline your practice with powerful tools designed for modern healthcare delivery
+            Streamline your practice with powerful tools designed for modern
+            healthcare delivery
           </Paragraph>
         </div>
 
@@ -21,7 +36,8 @@ export function ProviderFeatures() {
               </div>
               <CardTitle>Appointment Management</CardTitle>
               <CardDescription>
-                Efficiently manage your schedule, view patient appointments, and optimize your time
+                Efficiently manage your schedule, view patient appointments, and
+                optimize your time
               </CardDescription>
             </CardHeader>
           </Card>
@@ -33,7 +49,8 @@ export function ProviderFeatures() {
               </div>
               <CardTitle>Patient Records</CardTitle>
               <CardDescription>
-                Access comprehensive patient information, medical history, and treatment plans
+                Access comprehensive patient information, medical history, and
+                treatment plans
               </CardDescription>
             </CardHeader>
           </Card>
@@ -45,7 +62,8 @@ export function ProviderFeatures() {
               </div>
               <CardTitle>Clinical Notes</CardTitle>
               <CardDescription>
-                Document patient visits, treatment notes, and clinical observations seamlessly
+                Document patient visits, treatment notes, and clinical
+                observations seamlessly
               </CardDescription>
             </CardHeader>
           </Card>
@@ -57,7 +75,8 @@ export function ProviderFeatures() {
               </div>
               <CardTitle>Prescription Writing</CardTitle>
               <CardDescription>
-                Create and manage prescriptions with built-in drug interaction checks
+                Create and manage prescriptions with built-in drug interaction
+                checks
               </CardDescription>
             </CardHeader>
           </Card>
@@ -69,7 +88,8 @@ export function ProviderFeatures() {
               </div>
               <CardTitle>Analytics & Insights</CardTitle>
               <CardDescription>
-                Gain insights into your practice with comprehensive analytics and reporting tools
+                Gain insights into your practice with comprehensive analytics
+                and reporting tools
               </CardDescription>
             </CardHeader>
           </Card>
@@ -81,12 +101,13 @@ export function ProviderFeatures() {
               </div>
               <CardTitle>Specialist Referrals</CardTitle>
               <CardDescription>
-                Easily refer patients to specialists and track referral status and outcomes
+                Easily refer patients to specialists and track referral status
+                and outcomes
               </CardDescription>
             </CardHeader>
           </Card>
         </div>
       </div>
     </section>
-  );
+  )
 }

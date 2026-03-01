@@ -1,11 +1,11 @@
-import * as React from "react";
+import * as React from 'react'
 
-import { isSameDay } from "date-fns";
-import type { TimeSlot } from "@/client";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
+import { isSameDay } from 'date-fns'
+import type { TimeSlot } from '@/client'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function Calendar20({
   action,
@@ -14,16 +14,16 @@ export default function Calendar20({
   isLoading,
   onSelect,
 }: Readonly<{
-  action: (date: Date, time: string) => void;
-  bookedDates: Array<Date>;
-  timeSlots: Array<TimeSlot>;
-  isLoading: boolean;
-  onSelect?: (date: Date) => void;
+  action: (date: Date, time: string) => void
+  bookedDates: Array<Date>
+  timeSlots: Array<TimeSlot>
+  isLoading: boolean
+  onSelect?: (date: Date) => void
 }>) {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [selectedTime, setSelectedTime] = React.useState<string | null>("10:00");
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  const [selectedTime, setSelectedTime] = React.useState<string | null>('10:00')
 
-  const onClick = () => action(date!, selectedTime!);
+  const onClick = () => action(date!, selectedTime!)
 
   return (
     <Card className="gap-0 p-0">
@@ -33,8 +33,8 @@ export default function Calendar20({
             mode="single"
             selected={date}
             onSelect={(d) => {
-              setDate(d);
-              if (d) onSelect?.(d);
+              setDate(d)
+              if (d) onSelect?.(d)
             }}
             defaultMonth={date}
             disabled={[
@@ -45,7 +45,7 @@ export default function Calendar20({
             className="bg-transparent p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
             formatters={{
               formatWeekdayName: (d) => {
-                return d.toLocaleString("en-US", { weekday: "short" });
+                return d.toLocaleString('en-US', { weekday: 'short' })
               },
             }}
           />
@@ -55,10 +55,10 @@ export default function Calendar20({
             {timeSlots.map((slot) => (
               <Button
                 key={slot.time}
-                variant={selectedTime === slot.time ? "default" : "outline"}
+                variant={selectedTime === slot.time ? 'default' : 'outline'}
                 onClick={() => setSelectedTime(slot.time || null)}
                 className="w-full shadow-none"
-                disabled={slot.status === "booked"}
+                disabled={slot.status === 'booked'}
               >
                 {slot.time}
               </Button>
@@ -70,14 +70,14 @@ export default function Calendar20({
         <div className="text-sm">
           {date && selectedTime ? (
             <>
-              Your appointment is booked for{" "}
+              Your appointment is booked for{' '}
               <span className="font-medium">
-                {" "}
-                {date.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                })}{" "}
+                {' '}
+                {date.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                })}{' '}
               </span>
               at <span className="font-medium">{selectedTime}</span>.
             </>
@@ -97,10 +97,10 @@ export default function Calendar20({
               Booking...
             </>
           ) : (
-            "Book"
+            'Book'
           )}
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

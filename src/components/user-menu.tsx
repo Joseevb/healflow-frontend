@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useTheme } from "@/components/providers/theme-provider";
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useTheme } from '@/components/providers/theme-provider'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,16 +7,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { getInitials } from "@/lib/utils";
-import { LogOut, Moon, Settings, Sun, UserIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import type { User } from "@/types/auth";
-import { signOut } from "@/lib/auth-client";
+} from '@/components/ui/dropdown-menu'
+import { getInitials } from '@/lib/utils'
+import { LogOut, Moon, Settings, Sun, UserIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import type { User } from '@/types/auth'
+import { signOut } from '@/lib/auth-client'
 
 export function UserMenu({ user }: { user: User }) {
-  const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
+  const navigate = useNavigate()
+  const { theme, setTheme } = useTheme()
 
   return (
     <DropdownMenu>
@@ -49,16 +49,22 @@ export function UserMenu({ user }: { user: User }) {
             Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={(e) => setTheme(theme === "light" ? "dark" : "light", e)}>
-          {theme === "light" ? <Moon className="size-4 mr-2" /> : <Sun className="size-4 mr-2" />}
-          {theme === "light" ? "Dark mode" : "Light mode"}
+        <DropdownMenuItem
+          onClick={(e) => setTheme(theme === 'light' ? 'dark' : 'light', e)}
+        >
+          {theme === 'light' ? (
+            <Moon className="size-4 mr-2" />
+          ) : (
+            <Sun className="size-4 mr-2" />
+          )}
+          {theme === 'light' ? 'Dark mode' : 'Light mode'}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           onClick={async () => {
-            await signOut();
-            await navigate({ to: "/" });
+            await signOut()
+            await navigate({ to: '/' })
           }}
         >
           <LogOut className="size-4 mr-2" />
@@ -66,5 +72,5 @@ export function UserMenu({ user }: { user: User }) {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

@@ -1,13 +1,20 @@
-import { Activity, ArrowRight, Calendar, FileText, Hospital, Pill } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { H1, Paragraph } from "@/components/ui/typography";
-import { useSession } from "@/lib/auth-client";
+import {
+  Activity,
+  ArrowRight,
+  Calendar,
+  FileText,
+  Hospital,
+  Pill,
+} from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { H1, Paragraph } from '@/components/ui/typography'
+import { useSession } from '@/lib/auth-client'
 
 export function HeroSection() {
-  const { data: session } = useSession();
-  const isAuthenticated = session !== null;
+  const { data: session } = useSession()
+  const isAuthenticated = session !== null
 
   return (
     <section className="relative overflow-hidden  py-20 lg:py-32 -mx-10 -mt-10 mb-16">
@@ -20,15 +27,16 @@ export function HeroSection() {
                 Modern Healthcare Management
               </div>
               <H1 className="text-left text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-                Your Health,{" "}
+                Your Health,{' '}
                 <span className="bg-linear-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                   Simplified
                 </span>
               </H1>
               <Paragraph className="text-xl text-gray-600 dark:text-slate-300 leading-relaxed">
-                Streamline your healthcare experience with Healflow&lsquo;s comprehensive platform.
-                Book appointments, manage medical records, and connect with healthcare providers all
-                in one secure place.
+                Streamline your healthcare experience with Healflow&lsquo;s
+                comprehensive platform. Book appointments, manage medical
+                records, and connect with healthcare providers all in one secure
+                place.
               </Paragraph>
             </div>
 
@@ -40,7 +48,12 @@ export function HeroSection() {
                       Get Started <ArrowRight className="h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="text-lg px-8 py-6"
+                  >
                     <a href="#features">Learn More</a>
                   </Button>
                 </>
@@ -51,8 +64,16 @@ export function HeroSection() {
                       Go to Dashboard <ArrowRight className="h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
-                    <Link to="/dashboard/appointments" className="flex items-center gap-2">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="text-lg px-8 py-6"
+                  >
+                    <Link
+                      to="/dashboard/appointments"
+                      className="flex items-center gap-2"
+                    >
                       <Calendar className="h-5 w-5" />
                       Book Appointment
                     </Link>
@@ -72,10 +93,14 @@ export function HeroSection() {
                     </div>
                     <div>
                       <div className="font-semibold">Next Appointment</div>
-                      <div className="text-sm text-gray-500 dark:text-slate-400">Dr. Smith</div>
+                      <div className="text-sm text-gray-500 dark:text-slate-400">
+                        Dr. Smith
+                      </div>
                     </div>
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-slate-400">Tomorrow, 2:30 PM</div>
+                  <div className="text-sm text-gray-600 dark:text-slate-400">
+                    Tomorrow, 2:30 PM
+                  </div>
                 </CardContent>
               </Card>
 
@@ -87,7 +112,9 @@ export function HeroSection() {
                     </div>
                     <div>
                       <div className="font-semibold">Health Score</div>
-                      <div className="text-2xl font-bold text-green-600">92/100</div>
+                      <div className="text-2xl font-bold text-green-600">
+                        92/100
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -101,7 +128,9 @@ export function HeroSection() {
                     </div>
                     <div>
                       <div className="font-semibold">Medications</div>
-                      <div className="text-sm text-gray-500 dark:text-slate-400">3 active</div>
+                      <div className="text-sm text-gray-500 dark:text-slate-400">
+                        3 active
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -115,7 +144,9 @@ export function HeroSection() {
                     </div>
                     <div>
                       <div className="font-semibold">Records</div>
-                      <div className="text-sm text-gray-500 dark:text-slate-400">Up to date</div>
+                      <div className="text-sm text-gray-500 dark:text-slate-400">
+                        Up to date
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -125,5 +156,5 @@ export function HeroSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

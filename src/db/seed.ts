@@ -1,20 +1,20 @@
-import { parseArgs } from "node:util";
-import { reset, seed } from "drizzle-seed";
-import { db } from "../db";
-import { accounts, users } from "./schemas";
+import { parseArgs } from 'node:util'
+import { reset, seed } from 'drizzle-seed'
+import { db } from '../db'
+import { accounts, users } from './schemas'
 
 const { values } = parseArgs({
   args: Bun.argv,
   options: {
-    reset: { type: "boolean" },
+    reset: { type: 'boolean' },
   },
   strict: true,
   allowPositionals: true,
-});
+})
 
 async function main() {
   if (values.reset) {
-    await reset(db, { users, accounts });
+    await reset(db, { users, accounts })
   }
 
   await seed(db, { users, accounts }).refine((f) => ({
@@ -27,7 +27,7 @@ async function main() {
         emailVerified: f.boolean(),
       },
     },
-  }));
+  }))
 }
 
-main();
+main()

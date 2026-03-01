@@ -1,11 +1,11 @@
-import * as React from "react";
+import * as React from 'react'
 
 import type {
   TooltipContentProps as TooltipContentPrimitiveProps,
   TooltipProps as TooltipPrimitiveProps,
   TooltipProviderProps as TooltipProviderPrimitiveProps,
   TooltipTriggerProps as TooltipTriggerPrimitiveProps,
-} from "@/components/animate-ui/primitives/radix/tooltip";
+} from '@/components/animate-ui/primitives/radix/tooltip'
 import {
   TooltipArrow as TooltipArrowPrimitive,
   TooltipContent as TooltipContentPrimitive,
@@ -13,42 +13,50 @@ import {
   Tooltip as TooltipPrimitive,
   TooltipProvider as TooltipProviderPrimitive,
   TooltipTrigger as TooltipTriggerPrimitive,
-} from "@/components/animate-ui/primitives/radix/tooltip";
-import { cn } from "@/lib/utils";
+} from '@/components/animate-ui/primitives/radix/tooltip'
+import { cn } from '@/lib/utils'
 
-type TooltipProviderProps = TooltipProviderPrimitiveProps;
+type TooltipProviderProps = TooltipProviderPrimitiveProps
 
-function TooltipProvider({ delayDuration = 0, ...props }: TooltipProviderProps) {
-  return <TooltipProviderPrimitive delayDuration={delayDuration} {...props} />;
+function TooltipProvider({
+  delayDuration = 0,
+  ...props
+}: TooltipProviderProps) {
+  return <TooltipProviderPrimitive delayDuration={delayDuration} {...props} />
 }
 
 type TooltipProps = TooltipPrimitiveProps & {
-  delayDuration?: TooltipPrimitiveProps["delayDuration"];
-};
+  delayDuration?: TooltipPrimitiveProps['delayDuration']
+}
 
 function Tooltip({ delayDuration = 0, ...props }: TooltipProps) {
   return (
     <TooltipProvider delayDuration={delayDuration}>
       <TooltipPrimitive {...props} />
     </TooltipProvider>
-  );
+  )
 }
 
-type TooltipTriggerProps = TooltipTriggerPrimitiveProps;
+type TooltipTriggerProps = TooltipTriggerPrimitiveProps
 
 function TooltipTrigger({ ...props }: TooltipTriggerProps) {
-  return <TooltipTriggerPrimitive {...props} />;
+  return <TooltipTriggerPrimitive {...props} />
 }
 
-type TooltipContentProps = TooltipContentPrimitiveProps;
+type TooltipContentProps = TooltipContentPrimitiveProps
 
-function TooltipContent({ className, sideOffset, children, ...props }: TooltipContentProps) {
+function TooltipContent({
+  className,
+  sideOffset,
+  children,
+  ...props
+}: TooltipContentProps) {
   return (
     <TooltipPortalPrimitive>
       <TooltipContentPrimitive
         sideOffset={sideOffset}
         className={cn(
-          "bg-primary text-primary-foreground z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
+          'bg-primary text-primary-foreground z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance',
           className,
         )}
         {...props}
@@ -57,7 +65,7 @@ function TooltipContent({ className, sideOffset, children, ...props }: TooltipCo
         <TooltipArrowPrimitive className="bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
       </TooltipContentPrimitive>
     </TooltipPortalPrimitive>
-  );
+  )
 }
 
 export {
@@ -67,4 +75,4 @@ export {
   type TooltipProps,
   type TooltipTriggerProps,
   type TooltipContentProps,
-};
+}

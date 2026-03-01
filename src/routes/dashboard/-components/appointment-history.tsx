@@ -1,29 +1,29 @@
-import { Calendar, ChevronRight, Clock } from "lucide-react";
-import { SpecialistImage } from "./specialist-image";
-import type { AppointmentResponse } from "@/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Calendar, ChevronRight, Clock } from 'lucide-react'
+import { SpecialistImage } from './specialist-image'
+import type { AppointmentResponse } from '@/client'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface AppointmentHistoryProps {
-  appointmentHistory: Array<AppointmentResponse>;
-  statusColors: Record<AppointmentResponse["status"], string>;
+  appointmentHistory: Array<AppointmentResponse>
+  statusColors: Record<AppointmentResponse['status'], string>
 }
 
 const statusVariants: Record<
-  AppointmentResponse["status"],
-  "success" | "warning" | "info" | "error" | "secondary"
+  AppointmentResponse['status'],
+  'success' | 'warning' | 'info' | 'error' | 'secondary'
 > = {
-  CONFIRMED: "success",
-  PENDING: "warning",
-  COMPLETED: "info",
-  CANCELLED: "error",
-  NO_SHOW: "secondary",
-};
+  CONFIRMED: 'success',
+  PENDING: 'warning',
+  COMPLETED: 'info',
+  CANCELLED: 'error',
+  NO_SHOW: 'secondary',
+}
 
 export default function AppointmentHistory({
   appointmentHistory,
-}: Readonly<Omit<AppointmentHistoryProps, "statusColors">>) {
+}: Readonly<Omit<AppointmentHistoryProps, 'statusColors'>>) {
   return (
     <section className="space-y-6">
       <div className="flex items-center justify-between">
@@ -50,7 +50,9 @@ export default function AppointmentHistory({
             <div className="p-4 bg-slate-100 dark:bg-slate-700 rounded-full mb-4">
               <Calendar className="size-8 text-slate-500" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">No appointment history</h3>
+            <h3 className="font-semibold text-lg mb-2">
+              No appointment history
+            </h3>
             <p className="text-muted-foreground text-center max-w-sm">
               Your completed and past appointments will appear here.
             </p>
@@ -61,7 +63,7 @@ export default function AppointmentHistory({
           <CardHeader className="bg-linear-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-800/80 border-b border-slate-200 dark:border-slate-700/50 pb-4">
             <CardTitle className="text-base font-semibold text-slate-700 dark:text-slate-300">
               {appointmentHistory.length} Past Appointment
-              {appointmentHistory.length !== 1 ? "s" : ""}
+              {appointmentHistory.length !== 1 ? 's' : ''}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0 divide-y divide-slate-100 dark:divide-slate-700/50">
@@ -73,7 +75,9 @@ export default function AppointmentHistory({
                 <div className="flex items-center gap-4">
                   <div className="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-xl transition-all duration-300 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/20 group-hover:scale-105">
                     <SpecialistImage
-                      profilePictureName={appointment.specialist.profile_picture_name}
+                      profilePictureName={
+                        appointment.specialist.profile_picture_name
+                      }
                       name={appointment.specialist.name}
                     />
                   </div>
@@ -93,10 +97,12 @@ export default function AppointmentHistory({
                   <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 dark:bg-slate-700/50 px-3 py-1.5 rounded-lg">
                     <Calendar className="size-4 text-slate-400" />
                     <span>
-                      {new Date(appointment.appointment_date).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                      {new Date(
+                        appointment.appointment_date,
+                      ).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
                       })}
                     </span>
                   </div>
@@ -104,16 +110,21 @@ export default function AppointmentHistory({
                   <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 dark:bg-slate-700/50 px-3 py-1.5 rounded-lg">
                     <Clock className="size-4 text-slate-400" />
                     <span>
-                      {new Date(appointment.appointment_date).toLocaleTimeString(undefined, {
-                        hour: "2-digit",
-                        minute: "2-digit",
+                      {new Date(
+                        appointment.appointment_date,
+                      ).toLocaleTimeString(undefined, {
+                        hour: '2-digit',
+                        minute: '2-digit',
                       })}
                     </span>
                   </div>
 
                   <Badge variant={statusVariants[appointment.status]}>
                     {appointment.status.charAt(0) +
-                      appointment.status.slice(1).toLowerCase().replace("_", " ")}
+                      appointment.status
+                        .slice(1)
+                        .toLowerCase()
+                        .replace('_', ' ')}
                   </Badge>
 
                   <ChevronRight className="size-5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-200" />
@@ -124,5 +135,5 @@ export default function AppointmentHistory({
         </Card>
       )}
     </section>
-  );
+  )
 }

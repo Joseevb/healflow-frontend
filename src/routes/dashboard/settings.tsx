@@ -1,66 +1,72 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense } from "react";
-import { toast } from "sonner";
-import { AlertTriangle, RefreshCw, Settings } from "lucide-react";
+import { createFileRoute } from '@tanstack/react-router'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { Suspense } from 'react'
+import { toast } from 'sonner'
+import { AlertTriangle, RefreshCw, Settings } from 'lucide-react'
 
-import type { FieldConfigs } from "@/types/form-types";
-import type { SettingsFormSchema } from "@/types/settings";
-import { getUserProfileOptions } from "@/client/@tanstack/react-query.gen";
-import { updateUserProfile } from "@/client/sdk.gen";
-import { attempt } from "@/lib/attempt";
-import { useAppForm } from "@/hooks/form-context";
-import { dynamicFormFactory } from "@/components/dynamic-form";
-import { settingsSchema } from "@/schemas/settings.schema";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
+import type { FieldConfigs } from '@/types/form-types'
+import type { SettingsFormSchema } from '@/types/settings'
+import { getUserProfileOptions } from '@/client/@tanstack/react-query.gen'
+import { updateUserProfile } from '@/client/sdk.gen'
+import { attempt } from '@/lib/attempt'
+import { useAppForm } from '@/hooks/form-context'
+import { dynamicFormFactory } from '@/components/dynamic-form'
+import { settingsSchema } from '@/schemas/settings.schema'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Spinner } from '@/components/ui/spinner'
 
-export const Route = createFileRoute("/dashboard/settings")({
+export const Route = createFileRoute('/dashboard/settings')({
   component: RouteComponent,
   loader: ({ context }) => {
-    return context.queryClient.ensureQueryData(getUserProfileOptions());
+    return context.queryClient.ensureQueryData(getUserProfileOptions())
   },
   pendingComponent: LoadingComponent,
   errorComponent: ErrorBoundaryComponent,
-});
+})
 
 const fieldConfigs: FieldConfigs<SettingsFormSchema> = {
   firstName: {
-    label: "First name",
-    type: "text",
-    placeholder: "Enter your first name",
-    group: { name: "name", orientation: "horizontal" },
+    label: 'First name',
+    type: 'text',
+    placeholder: 'Enter your first name',
+    group: { name: 'name', orientation: 'horizontal' },
   },
   lastName: {
-    label: "Last name",
-    type: "text",
-    placeholder: "Enter your last name",
-    group: { name: "name", orientation: "horizontal" },
+    label: 'Last name',
+    type: 'text',
+    placeholder: 'Enter your last name',
+    group: { name: 'name', orientation: 'horizontal' },
   },
   phone: {
-    label: "Phone number",
-    type: "tel",
-    placeholder: "+1 (555) 000-0000",
+    label: 'Phone number',
+    type: 'tel',
+    placeholder: '+1 (555) 000-0000',
   },
   dateOfBirth: {
-    label: "Date of birth",
-    type: "date",
+    label: 'Date of birth',
+    type: 'date',
   },
-};
+}
 
 const defaultValues: SettingsFormSchema = {
-  firstName: "",
-  lastName: "",
-  phone: "",
-  dateOfBirth: "",
-};
+  firstName: '',
+  lastName: '',
+  phone: '',
+  dateOfBirth: '',
+}
 
 const Form = dynamicFormFactory({
   fieldConfigs,
   defaultValues,
-});
+})
 
 function LoadingComponent() {
   return (
@@ -123,7 +129,7 @@ function LoadingComponent() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
 
 function ErrorBoundaryComponent({ error }: { error: Error }) {
@@ -152,8 +158,8 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
                 Failed to Load Settings
               </h3>
               <p className="text-red-700 dark:text-red-300 max-w-md">
-                We couldn't retrieve your profile information. Please try refreshing the page or
-                contact support if the problem persists.
+                We couldn't retrieve your profile information. Please try
+                refreshing the page or contact support if the problem persists.
               </p>
               <details className="mt-4">
                 <summary className="text-sm text-red-600 dark:text-red-400 cursor-pointer hover:underline">
@@ -176,25 +182,25 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
 
 function SettingsForm() {
-  const { data: userProfile } = useSuspenseQuery(getUserProfileOptions());
-  const queryClient = useQueryClient();
+  const { data: userProfile } = useSuspenseQuery(getUserProfileOptions())
+  const queryClient = useQueryClient()
 
   const formDefaultValues: SettingsFormSchema = {
-    firstName: userProfile.first_name || "",
-    lastName: userProfile.last_name || "",
-    phone: userProfile.phone || "",
-    dateOfBirth: userProfile.date_of_birth || "",
-  };
+    firstName: userProfile.first_name || '',
+    lastName: userProfile.last_name || '',
+    phone: userProfile.phone || '',
+    dateOfBirth: userProfile.date_of_birth || '',
+  }
 
   const form = useAppForm({
     defaultValues: formDefaultValues,
     validators: { onSubmit: settingsSchema },
     onSubmit: async ({ value }) => {
-      const toastId = toast.loading("Updating profile...");
+      const toastId = toast.loading('Updating profile...')
 
       const { error } = await attempt(() =>
         updateUserProfile({
@@ -205,22 +211,22 @@ function SettingsForm() {
             date_of_birth: value.dateOfBirth,
           },
         }),
-      );
+      )
 
       if (error) {
-        toast.error("Failed to update profile. Please try again.", {
+        toast.error('Failed to update profile. Please try again.', {
           id: toastId,
-        });
-        return;
+        })
+        return
       }
 
       await queryClient.invalidateQueries({
         queryKey: getUserProfileOptions().queryKey,
-      });
+      })
 
-      toast.success("Profile updated successfully!", { id: toastId });
+      toast.success('Profile updated successfully!', { id: toastId })
     },
-  });
+  })
 
   return (
     <Form
@@ -232,11 +238,11 @@ function SettingsForm() {
         </div>
       }
     />
-  );
+  )
 }
 
 function AccountInformation() {
-  const { data: userProfile } = useSuspenseQuery(getUserProfileOptions());
+  const { data: userProfile } = useSuspenseQuery(getUserProfileOptions())
 
   return (
     <Card className="border shadow-lg">
@@ -248,30 +254,38 @@ function AccountInformation() {
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-1">
             <p className="text-sm font-medium text-muted-foreground">Email</p>
-            <p className="text-sm font-medium">{userProfile.email || "N/A"}</p>
+            <p className="text-sm font-medium">{userProfile.email || 'N/A'}</p>
           </div>
           <div className="space-y-1">
             <p className="text-sm font-medium text-muted-foreground">User ID</p>
-            <p className="font-mono text-xs text-muted-foreground">{userProfile.id || "N/A"}</p>
+            <p className="font-mono text-xs text-muted-foreground">
+              {userProfile.id || 'N/A'}
+            </p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium text-muted-foreground">Profile Status</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              Profile Status
+            </p>
             <div className="flex items-center gap-2">
               <div
                 className={`h-2 w-2 rounded-full ${
-                  userProfile.is_profile_complete ? "bg-green-500" : "bg-yellow-500"
+                  userProfile.is_profile_complete
+                    ? 'bg-green-500'
+                    : 'bg-yellow-500'
                 }`}
               />
               <span className="text-sm font-medium">
-                {userProfile.is_profile_complete ? "Complete" : "Incomplete"}
+                {userProfile.is_profile_complete ? 'Complete' : 'Incomplete'}
               </span>
             </div>
           </div>
           {userProfile.primary_specialist && (
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">Primary Specialist</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Primary Specialist
+              </p>
               <p className="text-sm font-medium">
-                {userProfile.primary_specialist.name}{" "}
+                {userProfile.primary_specialist.name}{' '}
                 <span className="text-muted-foreground">
                   ({userProfile.primary_specialist.specialty})
                 </span>
@@ -281,7 +295,7 @@ function AccountInformation() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 function RouteComponent() {
@@ -322,5 +336,5 @@ function RouteComponent() {
         <AccountInformation />
       </Suspense>
     </div>
-  );
+  )
 }

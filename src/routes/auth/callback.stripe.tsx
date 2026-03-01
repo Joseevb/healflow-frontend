@@ -1,17 +1,18 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Effect } from "effect";
-import { UserRegistrationService } from "@/services/user-registration.service";
-import { apiKeyConfig } from "@/lib/api-key.config";
-import { attempt } from "@/lib/attempt";
-import { clearSignUpSession, getSignUpSession } from "@/server/session";
-import { auth } from "@/lib/auth";
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { Effect } from 'effect'
+import { UserRegistrationService } from '@/services/user-registration.service'
+import { apiKeyConfig } from '@/lib/api-key.config'
+import { attempt } from '@/lib/attempt'
+import { clearSignUpSession, getSignUpSession } from '@/server/session'
+import { auth } from '@/lib/auth'
 
-export const Route = createFileRoute("/auth/callback/stripe")({
+export const Route = createFileRoute('/auth/callback/stripe')({
   server: {
     handlers: {
       GET: async ({ request }: { request: Request }) => {
-        console.log("STRIPE CALLBACK", request);
-        const { createdUserId, accountData, userData } = await getSignUpSession();
+        console.log('STRIPE CALLBACK', request)
+        const { createdUserId, accountData, userData } =
+          await getSignUpSession()
         // if (!createdUserId || !accountData || !userData) {
         //   throw redirect({ to: "/auth/sign-up" });
         // }
@@ -21,11 +22,11 @@ export const Route = createFileRoute("/auth/callback/stripe")({
           body: {
             onboardingCompleted: true,
           },
-        });
+        })
 
         // Provision to backend API
         const { error: provisionError } = await attempt(async () => {
-          const service = new UserRegistrationService(apiKeyConfig);
+          const service = new UserRegistrationService(apiKeyConfig)
           await Effect.runPromise(
             service.post({
               user_id: createdUserId!,
@@ -35,23 +36,26 @@ export const Route = createFileRoute("/auth/callback/stripe")({
               last_name: accountData!.lastName,
               phone: userData!.phoneNumber,
             }),
-          );
-        });
+          )
+        })
 
         if (provisionError) {
-          console.error("[Stripe Callback] Provisioning failed:", provisionError);
+          console.error(
+            '[Stripe Callback] Provisioning failed:',
+            provisionError,
+          )
           // Keep session for retry, show error
           throw redirect({
-            to: "/auth/sign-up/payment-info",
-            search: { error: "provisioning_failed" },
-          });
+            to: '/auth/sign-up/payment-info',
+            search: { error: 'provisioning_failed' },
+          })
         }
 
-        console.log("[Stripe Callback] User provisioned successfully");
+        console.log('[Stripe Callback] User provisioned successfully')
 
         // Success! Clear session
-        await clearSignUpSession();
-        throw redirect({ to: "/dashboard" });
+        await clearSignUpSession()
+        throw redirect({ to: '/dashboard' })
       },
     },
   },
@@ -92,4 +96,4 @@ export const Route = createFileRoute("/auth/callback/stripe")({
   //   await clearSignUpSession();
   //   throw redirect({ to: "/dashboard" });
   // },
-});
+})

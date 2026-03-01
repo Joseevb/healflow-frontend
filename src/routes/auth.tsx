@@ -1,29 +1,29 @@
-import { Link, Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { Image } from "@unpic/react";
-import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { getSession } from "@/lib/auth-session";
+import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Image } from '@unpic/react'
+import { Button } from '@/components/ui/button'
+import { ModeToggle } from '@/components/ui/mode-toggle'
+import { getSession } from '@/lib/auth-session'
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute('/auth')({
   component: RouteComponent,
   context: ({ context }) => ({ ...context, hideHeader: true }),
 
   beforeLoad: async () => {
-    const session = await getSession();
+    const session = await getSession()
     return {
       session,
-    };
-  },
-  loader: ({ context, route }) => {
-    const session = context.session;
-
-    console.log("[AUTH]", { routeFullPath: route.fullPath, route });
-
-    if (session && !route.fullPath.startsWith("/auth")) {
-      throw redirect({ to: "/dashboard" });
     }
   },
-});
+  loader: ({ context, route }) => {
+    const session = context.session
+
+    console.log('[AUTH]', { routeFullPath: route.fullPath, route })
+
+    if (session && !route.fullPath.startsWith('/auth')) {
+      throw redirect({ to: '/dashboard' })
+    }
+  },
+})
 
 export default function RouteComponent() {
   return (
@@ -50,5 +50,5 @@ export default function RouteComponent() {
         <Outlet />
       </div>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import {
   CheckboxField,
   CheckboxGroupField,
@@ -11,10 +11,10 @@ import {
   SwitchField,
   TextAreaField,
   TextField,
-} from "@/components/form-fields";
+} from '@/components/form-fields'
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } =
-  createFormHookContexts();
+  createFormHookContexts()
 
 export const { useAppForm, withForm } = createFormHook({
   fieldContext,
@@ -34,4 +34,4 @@ export const { useAppForm, withForm } = createFormHook({
     SubscribeButton,
     Form: FormRoot,
   },
-});
+})

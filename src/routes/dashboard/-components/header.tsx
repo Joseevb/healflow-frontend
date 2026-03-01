@@ -1,6 +1,6 @@
-import { Calendar } from "lucide-react";
-import BookAppointmentDialog from "./book-appointment-dialog";
-import { Badge } from "@/components/ui/badge";
+import { Calendar } from 'lucide-react'
+import BookAppointmentDialog from './book-appointment-dialog'
+import { Badge } from '@/components/ui/badge'
 
 export default function Header() {
   return (
@@ -18,10 +18,11 @@ export default function Header() {
           </Badge>
         </div>
         <p className="text-muted-foreground max-w-md">
-          Schedule, view, and manage your upcoming and past appointments with healthcare providers.
+          Schedule, view, and manage your upcoming and past appointments with
+          healthcare providers.
         </p>
       </div>
       <BookAppointmentDialog />
     </header>
-  );
+  )
 }

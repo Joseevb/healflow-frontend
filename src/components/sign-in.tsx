@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { toast } from "sonner";
-import { Link } from "@tanstack/react-router";
-import type { IsLoading, SignInSchema } from "@/types/auth";
-import type { FieldConfigs } from "@/types/form-types";
-import { useAppForm } from "@/hooks/form-context";
-import SocialSignOn from "@/components/social-sign-on";
-import { dynamicFormFactory } from "@/components/dynamic-form";
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Link } from '@tanstack/react-router'
+import type { IsLoading, SignInSchema } from '@/types/auth'
+import type { FieldConfigs } from '@/types/form-types'
+import { useAppForm } from '@/hooks/form-context'
+import SocialSignOn from '@/components/social-sign-on'
+import { dynamicFormFactory } from '@/components/dynamic-form'
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { signIn } from "@/lib/auth-client";
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { signIn } from '@/lib/auth-client'
 import {
   Card,
   CardContent,
@@ -16,38 +16,38 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 
-import { signInSchema } from "@/schemas/sing-in.schema";
-import type { RoutePath } from "@/types/routes";
+import { signInSchema } from '@/schemas/sing-in.schema'
+import type { RoutePath } from '@/types/routes'
 
 const fieldConfigs: FieldConfigs<SignInSchema> = {
   email: {
-    label: "Email",
-    type: "email",
+    label: 'Email',
+    type: 'email',
   },
   password: {
-    label: "Password",
-    type: "password",
+    label: 'Password',
+    type: 'password',
   },
   rememberMe: {
-    label: "Remember me",
-    type: "checkbox",
-    orientation: "horizontal",
+    label: 'Remember me',
+    type: 'checkbox',
+    orientation: 'horizontal',
   },
-} as const;
+} as const
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState<IsLoading>({
     loading: false,
-    type: "email",
-  });
-  const [error, setError] = useState<string | null>(null);
+    type: 'email',
+  })
+  const [error, setError] = useState<string | null>(null)
 
   const form = useAppForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       rememberMe: false,
     } as SignInSchema,
     validators: {
@@ -58,27 +58,27 @@ export default function SignIn() {
         ...data,
         fetchOptions: {
           onError: (err) => setError(err.error.message),
-          onRequest: () => setIsLoading({ loading: true, type: "email" }),
-          onResponse: () => setIsLoading({ loading: false, type: "email" }),
+          onRequest: () => setIsLoading({ loading: true, type: 'email' }),
+          onResponse: () => setIsLoading({ loading: false, type: 'email' }),
           onSuccess: () => {
-            toast.success("Successfully signed in!");
+            toast.success('Successfully signed in!')
           },
         },
-        callbackURL: "/dashboard" satisfies RoutePath,
-      });
+        callbackURL: '/dashboard' satisfies RoutePath,
+      })
     },
-  });
+  })
 
   const defaultValues: SignInSchema = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     rememberMe: false,
-  };
+  }
 
   const Form = dynamicFormFactory({
     fieldConfigs,
     defaultValues,
-  });
+  })
 
   return (
     <div className="flex flex-col gap-6">
@@ -89,10 +89,12 @@ export default function SignIn() {
         </CardHeader>
         <CardContent>
           <SocialSignOn isLoading={isLoading} setIsLoading={setIsLoading} />
-          <span className="block text-center text-sm mx-auto mt-10">Or continue with</span>
+          <span className="block text-center text-sm mx-auto mt-10">
+            Or continue with
+          </span>
           <Separator className="mb-6" />
           {error && (
-            <Alert variant={"destructive"} className="mb-5">
+            <Alert variant={'destructive'} className="mb-5">
               <AlertTitle>Error signing up</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
@@ -117,5 +119,5 @@ export default function SignIn() {
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }

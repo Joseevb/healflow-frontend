@@ -1,16 +1,16 @@
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldLabel } from '@/components/ui/field'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 type SelectItemData = {
-  value: string;
-  label: string;
-};
+  value: string
+  label: string
+}
 
 export function FieldSelect({
   data,
@@ -19,18 +19,18 @@ export function FieldSelect({
   description,
   action,
 }: Readonly<{
-  data: Array<SelectItemData>;
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  action?: (item: SelectItemData) => void;
+  data: Array<SelectItemData>
+  label?: string
+  placeholder?: string
+  description?: string
+  action?: (item: SelectItemData) => void
 }>) {
   const handleValueChange = (value: string) => {
-    const selectedItem = data.find((item) => item.value === value);
+    const selectedItem = data.find((item) => item.value === value)
     if (selectedItem && action) {
-      action(selectedItem);
+      action(selectedItem)
     }
-  };
+  }
 
   return (
     <div className="w-full max-w-md">
@@ -38,7 +38,7 @@ export function FieldSelect({
         {label && <FieldLabel>{label}</FieldLabel>}
         <Select onValueChange={handleValueChange}>
           <SelectTrigger>
-            <SelectValue placeholder={placeholder ?? "Select..."} />
+            <SelectValue placeholder={placeholder ?? 'Select...'} />
           </SelectTrigger>
           <SelectContent>
             {data.map((item) => (
@@ -51,5 +51,5 @@ export function FieldSelect({
         {description && <FieldDescription>{description}</FieldDescription>}
       </Field>
     </div>
-  );
+  )
 }

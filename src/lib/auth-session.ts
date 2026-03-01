@@ -1,63 +1,68 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
-import { auth } from "@/lib/auth";
-import { redirect } from "@tanstack/react-router";
+import { createServerFn } from '@tanstack/react-start'
+import { getRequestHeaders } from '@tanstack/react-start/server'
+import { auth } from '@/lib/auth'
+import { redirect } from '@tanstack/react-router'
 
-import { attempt } from "@/lib/attempt";
-import { authMiddleware } from "@/lib/auth-middleware";
-import { signUpSession } from "@/schemas/sign-up-session.schema";
-import { getSignUpSession, updateSignUpSession } from "@/server/session";
+import { attempt } from '@/lib/attempt'
+import { authMiddleware } from '@/lib/auth-middleware'
+import { signUpSession } from '@/schemas/sign-up-session.schema'
+import { getSignUpSession, updateSignUpSession } from '@/server/session'
 
-export const getSession = createServerFn({ method: "GET" }).handler(async () => {
-  const headers = getRequestHeaders();
-  const session = await auth.api.getSession({ headers });
+export const getSession = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const headers = getRequestHeaders()
+    const session = await auth.api.getSession({ headers })
 
-  return session;
-});
+    return session
+  },
+)
 
-export const ensureSession = createServerFn({ method: "GET" }).handler(async () => {
-  const headers = getRequestHeaders();
-  const session = await auth.api.getSession({ headers });
+export const ensureSession = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const headers = getRequestHeaders()
+    const session = await auth.api.getSession({ headers })
 
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
+    if (!session) {
+      throw new Error('Unauthorized')
+    }
 
-  return session;
-});
+    return session
+  },
+)
 
-export const getUserId = createServerFn({ method: "GET" })
+export const getUserId = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
-  .handler(({ context }) => context.user.id);
+  .handler(({ context }) => context.user.id)
 
-export const getJwt = createServerFn({ method: "GET" })
+export const getJwt = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
-  .handler(({ context }) => context.jwt);
+  .handler(({ context }) => context.jwt)
 
-export const createUser = createServerFn({ method: "POST" })
+export const createUser = createServerFn({ method: 'POST' })
   .inputValidator(signUpSession)
   .handler(async ({ data }) => {
-    const session = await getSignUpSession();
+    const session = await getSignUpSession()
 
     // TODO: Implement this
     async function storeImage(file: File) {
-      const imageName = file.name.replace(/\.[^/.]+$/, "");
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return imageName;
+      const imageName = file.name.replace(/\.[^/.]+$/, '')
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      return imageName
     }
 
     switch (data.state) {
       // Email signup: Create Better Auth user immediately
-      case "email": {
+      case 'email': {
         if (!data.accountData?.password) {
-          throw redirect({ to: "/auth/sign-up" });
+          throw redirect({ to: '/auth/sign-up' })
         }
 
-        const { password, firstName, lastName, email, profileImage } = data.accountData;
+        const { password, firstName, lastName, email, profileImage } =
+          data.accountData
 
         if (profileImage) {
-          const imageName = await storeImage(profileImage);
-          data.accountData.profileImageRef = imageName;
+          const imageName = await storeImage(profileImage)
+          data.accountData.profileImageRef = imageName
         }
 
         const { data: authResult, error } = await attempt(
@@ -69,10 +74,10 @@ export const createUser = createServerFn({ method: "POST" })
                 password,
               },
             }),
-        );
+        )
 
         if (error || !authResult.user.id) {
-          throw new Error("Failed to create account");
+          throw new Error('Failed to create account')
         }
 
         // Store in session for later provisioning (AFTER payment)
@@ -80,17 +85,17 @@ export const createUser = createServerFn({ method: "POST" })
           data: {
             createdUserId: authResult.user.id,
             accountData: data.accountData,
-            state: "user-data",
+            state: 'user-data',
           },
-        });
+        })
 
-        throw redirect({ to: "/auth/sign-up/user-data" });
+        throw redirect({ to: '/auth/sign-up/user-data' })
       }
 
       // User data: Just save and go to payment
-      case "user-data": {
+      case 'user-data': {
         if (!data.userData) {
-          throw redirect({ to: "/auth/sign-up/user-data" });
+          throw redirect({ to: '/auth/sign-up/user-data' })
         }
 
         await updateSignUpSession({
@@ -98,16 +103,16 @@ export const createUser = createServerFn({ method: "POST" })
             ...session,
             userData: data.userData,
           },
-        });
+        })
 
-        throw redirect({ to: "/auth/sign-up/payment-info" });
+        throw redirect({ to: '/auth/sign-up/payment-info' })
       }
 
       default:
-        throw redirect({ to: "/auth/sign-up" });
+        throw redirect({ to: '/auth/sign-up' })
     }
-  });
+  })
 
-export const getSessionData = createServerFn({ method: "GET" }).handler(
+export const getSessionData = createServerFn({ method: 'GET' }).handler(
   async () => await getSignUpSession(),
-);
+)

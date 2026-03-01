@@ -1,10 +1,10 @@
-import { Image } from "@unpic/react";
-import React from "react";
-import { Link } from "@tanstack/react-router";
-import type { buttonVariants } from "@/components/ui/button";
-import type { VariantProps } from "class-variance-authority";
-import type { JSX } from "react";
-import { Button } from "@/components/ui/button";
+import { Image } from '@unpic/react'
+import React from 'react'
+import { Link } from '@tanstack/react-router'
+import type { buttonVariants } from '@/components/ui/button'
+import type { VariantProps } from 'class-variance-authority'
+import type { JSX } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,43 +13,51 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
 
 export type NavItemBase = {
-  name: string;
-  icon?: React.ReactNode;
-  className?: string;
-};
+  name: string
+  icon?: React.ReactNode
+  className?: string
+}
 
 export type NavItemLink = NavItemBase & {
-  type: "link";
-  href: string;
-  description?: string;
-  buttonVariant?: VariantProps<typeof buttonVariants>["variant"];
-};
+  type: 'link'
+  href: string
+  description?: string
+  buttonVariant?: VariantProps<typeof buttonVariants>['variant']
+}
 
 export type NavItemDropdown = NavItemBase & {
-  type: "dropdown";
-  children: Array<NavItemLink | NavItemHighlight>;
-  buttonVariant?: VariantProps<typeof buttonVariants>["variant"];
-};
+  type: 'dropdown'
+  children: Array<NavItemLink | NavItemHighlight>
+  buttonVariant?: VariantProps<typeof buttonVariants>['variant']
+}
 
 export type NavItemHighlight = NavItemBase & {
-  type: "highlight";
-  href: string;
-  description: string;
-  subtitle?: string;
-};
+  type: 'highlight'
+  href: string
+  description: string
+  subtitle?: string
+}
 
 export type NavItemCustomComponent = NavItemBase & {
-  type: "custom";
-  component: React.ReactNode;
-};
+  type: 'custom'
+  component: React.ReactNode
+}
 
-export type NavItem = NavItemLink | NavItemDropdown | NavItemHighlight | NavItemCustomComponent;
+export type NavItem =
+  | NavItemLink
+  | NavItemDropdown
+  | NavItemHighlight
+  | NavItemCustomComponent
 
-function DropdownContentItem({ item }: { item: NavItemLink | NavItemHighlight }) {
+function DropdownContentItem({
+  item,
+}: {
+  item: NavItemLink | NavItemHighlight
+}) {
   const contentItemRenderMap: Record<string, () => JSX.Element> = {
     highlight: () => (
       <li className="row-span-3">
@@ -86,22 +94,34 @@ function DropdownContentItem({ item }: { item: NavItemLink | NavItemHighlight })
         </NavigationMenuLink>
       </li>
     ),
-  };
+  }
 
-  return contentItemRenderMap[item.type]();
+  return contentItemRenderMap[item.type]()
 }
 
 interface GenericHeaderProps {
-  navItems: Array<NavItem>;
-  className?: string;
+  navItems: Array<NavItem>
+  className?: string
 }
 
-export function DynamicNavigationHeader({ navItems, className }: GenericHeaderProps) {
+export function DynamicNavigationHeader({
+  navItems,
+  className,
+}: GenericHeaderProps) {
   const navItemRenderMap: Record<string, (item: NavItem) => React.ReactNode> = {
     link: (item) => (
-      <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), item.className)}>
-        <Button asChild variant={(item as NavItemLink).buttonVariant ?? "outline"}>
-          <Link to={(item as NavItemLink).href} className="flex flex-row items-center gap-2">
+      <NavigationMenuLink
+        asChild
+        className={cn(navigationMenuTriggerStyle(), item.className)}
+      >
+        <Button
+          asChild
+          variant={(item as NavItemLink).buttonVariant ?? 'outline'}
+        >
+          <Link
+            to={(item as NavItemLink).href}
+            className="flex flex-row items-center gap-2"
+          >
             {item.icon}
             {item.name}
           </Link>
@@ -109,12 +129,17 @@ export function DynamicNavigationHeader({ navItems, className }: GenericHeaderPr
       </NavigationMenuLink>
     ),
     dropdown: (item) => {
-      const dropdownItem = item as NavItemDropdown;
-      const hasHighlightChild = dropdownItem.children.some((child) => child.type === "highlight");
+      const dropdownItem = item as NavItemDropdown
+      const hasHighlightChild = dropdownItem.children.some(
+        (child) => child.type === 'highlight',
+      )
 
       return (
         <div className={cn(item.className)}>
-          <Button asChild variant={(item as NavItemLink).buttonVariant ?? "outline"}>
+          <Button
+            asChild
+            variant={(item as NavItemLink).buttonVariant ?? 'outline'}
+          >
             <NavigationMenuTrigger className="flex flex-row items-center gap-2">
               {item.icon}
               {item.name}
@@ -124,8 +149,8 @@ export function DynamicNavigationHeader({ navItems, className }: GenericHeaderPr
             <ul
               className={`grid gap-3 p-6 ${
                 hasHighlightChild
-                  ? "md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]"
-                  : "w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
+                  ? 'md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'
+                  : 'w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]'
               }`}
             >
               {dropdownItem.children.map((child) => (
@@ -134,23 +159,23 @@ export function DynamicNavigationHeader({ navItems, className }: GenericHeaderPr
             </ul>
           </NavigationMenuContent>
         </div>
-      );
+      )
     },
     custom: (item) => {
-      return (item as NavItemCustomComponent).component;
+      return (item as NavItemCustomComponent).component
     },
-  };
+  }
 
   return (
     <header
       className={cn(
-        "flex items-center justify-between py-4 px-8 sm:px-6 lg:px-8 backdrop-blur-sm bg-accent/10",
+        'flex items-center justify-between py-4 px-8 sm:px-6 lg:px-8 backdrop-blur-sm bg-accent/10',
         className,
       )}
     >
       <div>
-        <Link to={"/"}>
-          <Image src={"/logo.png"} alt="logo" width={40} height={40} />
+        <Link to={'/'}>
+          <Image src={'/logo.png'} alt="logo" width={40} height={40} />
         </Link>
       </div>
 
@@ -164,5 +189,5 @@ export function DynamicNavigationHeader({ navItems, className }: GenericHeaderPr
         </NavigationMenuList>
       </NavigationMenu>
     </header>
-  );
+  )
 }

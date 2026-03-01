@@ -3,21 +3,28 @@ import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
-} from "@tanstack/react-query";
-import { AlertCircle, Plus } from "lucide-react";
-import { Component, Suspense, useCallback, useMemo, useState, useTransition } from "react";
-import { toast } from "sonner";
-import type { ErrorInfo, ReactNode } from "react";
-import type { ApiProblemDetail, SpecialistResponse } from "@/client";
+} from '@tanstack/react-query'
+import { AlertCircle, Plus } from 'lucide-react'
+import {
+  Component,
+  Suspense,
+  useCallback,
+  useMemo,
+  useState,
+  useTransition,
+} from 'react'
+import { toast } from 'sonner'
+import type { ErrorInfo, ReactNode } from 'react'
+import type { ApiProblemDetail, SpecialistResponse } from '@/client'
 import {
   createAppointmentMutation,
   getAvailableSpecialistsOptions,
   getPastAppointmentsOptions,
   getSpecialistBookingDataOptions,
   getUpcomingAppointmentsOptions,
-} from "@/client/@tanstack/react-query.gen";
-import Calendar from "@/components/calendar";
-import { Button } from "@/components/ui/button";
+} from '@/client/@tanstack/react-query.gen'
+import Calendar from '@/components/calendar'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -25,49 +32,49 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { FieldSelect } from "@/components/ui/field-select";
-import { Spinner } from "@/components/ui/spinner";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/dialog'
+import { FieldSelect } from '@/components/ui/field-select'
+import { Spinner } from '@/components/ui/spinner'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Textarea } from '@/components/ui/textarea'
 
 interface SpecialistSelectProps {
-  readonly onSelect: (specialistId: string) => void;
+  readonly onSelect: (specialistId: string) => void
 }
 
 interface BookingCalendarProps {
-  readonly specialistId: string;
-  readonly onSuccess: () => void;
+  readonly specialistId: string
+  readonly onSuccess: () => void
 }
 
 interface ErrorBoundaryProps {
-  readonly children: ReactNode;
-  readonly onReset?: () => void;
+  readonly children: ReactNode
+  readonly onReset?: () => void
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean;
-  error: Error | null;
+  hasError: boolean
+  error: Error | null
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false, error: null };
+    super(props)
+    this.state = { hasError: false, error: null }
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo)
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, error: null });
-    this.props.onReset?.();
-  };
+    this.setState({ hasError: false, error: null })
+    this.props.onReset?.()
+  }
 
   render() {
     if (this.state.hasError && this.state.error) {
@@ -76,49 +83,57 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Something went wrong</AlertTitle>
           <AlertDescription className="flex flex-col gap-2">
-            <p>{this.state.error.message || "An error occurred while loading data."}</p>
-            <Button variant="outline" size="sm" onClick={this.handleReset} className="w-fit">
+            <p>
+              {this.state.error.message ||
+                'An error occurred while loading data.'}
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={this.handleReset}
+              className="w-fit"
+            >
               Try again
             </Button>
           </AlertDescription>
         </Alert>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
 function useBookAppointmentMutation(onSuccess: () => void) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: createAppointmentMutation().mutationFn,
     onSuccess: () => {
-      toast.success("Appointment created successfully!");
-      onSuccess();
+      toast.success('Appointment created successfully!')
+      onSuccess()
       void queryClient.invalidateQueries({
         queryKey: getUpcomingAppointmentsOptions().queryKey,
-      });
+      })
       void queryClient.invalidateQueries({
         queryKey: getPastAppointmentsOptions().queryKey,
-      });
+      })
     },
     onError: (error: unknown) => {
-      const apiError = (error as { data?: ApiProblemDetail }).data;
-      toast.error(apiError?.detail ?? "Failed to create appointment");
+      const apiError = (error as { data?: ApiProblemDetail }).data
+      toast.error(apiError?.detail ?? 'Failed to create appointment')
     },
-  });
+  })
 }
 
 function useDateRange() {
   return useMemo(() => {
-    const now = new Date();
+    const now = new Date()
     return {
       startDate: new Date(now.getFullYear(), now.getMonth(), 1),
       endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
-    };
-  }, []);
+    }
+  }, [])
 }
 
 function LoadingSpinner({ message }: { readonly message: string }) {
@@ -127,11 +142,13 @@ function LoadingSpinner({ message }: { readonly message: string }) {
       <Spinner />
       <span>{message}</span>
     </div>
-  );
+  )
 }
 
 function SpecialistSelectContent({ onSelect }: SpecialistSelectProps) {
-  const { data: specialists } = useSuspenseQuery(getAvailableSpecialistsOptions());
+  const { data: specialists } = useSuspenseQuery(
+    getAvailableSpecialistsOptions(),
+  )
 
   const selectData = useMemo(
     () =>
@@ -140,14 +157,14 @@ function SpecialistSelectContent({ onSelect }: SpecialistSelectProps) {
         label: s.name,
       })),
     [specialists],
-  );
+  )
 
   const handleSelect = useCallback(
     (item: { value: string; label: string }) => {
-      onSelect(item.value);
+      onSelect(item.value)
     },
     [onSelect],
-  );
+  )
 
   return (
     <FieldSelect
@@ -157,7 +174,7 @@ function SpecialistSelectContent({ onSelect }: SpecialistSelectProps) {
       description="Select your specialist medic of choice"
       action={handleSelect}
     />
-  );
+  )
 }
 
 function SpecialistSelect({ onSelect }: SpecialistSelectProps) {
@@ -165,19 +182,24 @@ function SpecialistSelect({ onSelect }: SpecialistSelectProps) {
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary onReset={reset}>
-          <Suspense fallback={<LoadingSpinner message="Loading specialists..." />}>
+          <Suspense
+            fallback={<LoadingSpinner message="Loading specialists..." />}
+          >
             <SpecialistSelectContent onSelect={onSelect} />
           </Suspense>
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>
-  );
+  )
 }
 
-function BookingCalendarContent({ specialistId, onSuccess }: BookingCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [notes, setNotes] = useState("");
-  const { startDate, endDate } = useDateRange();
+function BookingCalendarContent({
+  specialistId,
+  onSuccess,
+}: BookingCalendarProps) {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [notes, setNotes] = useState('')
+  const { startDate, endDate } = useDateRange()
 
   const { data: bookingData } = useSuspenseQuery({
     ...getSpecialistBookingDataOptions({
@@ -187,30 +209,34 @@ function BookingCalendarContent({ specialistId, onSuccess }: BookingCalendarProp
         endDate: endDate.toISOString(),
       },
     }),
-  });
+  })
 
-  const { mutate, isPending } = useBookAppointmentMutation(onSuccess);
+  const { mutate, isPending } = useBookAppointmentMutation(onSuccess)
 
   const fullyBookedDates = useMemo(
     () =>
       bookingData
-        .filter((day) => day.timeslots.every((slot) => slot.status === "booked"))
+        .filter((day) =>
+          day.timeslots.every((slot) => slot.status === 'booked'),
+        )
         .map((day) => new Date(day.date)),
     [bookingData],
-  );
+  )
 
   const timeSlots = useMemo(
     () =>
-      bookingData.find((day) => day.date.split("T")[0] === selectedDate.toISOString().split("T")[0])
-        ?.timeslots ?? [],
+      bookingData.find(
+        (day) =>
+          day.date.split('T')[0] === selectedDate.toISOString().split('T')[0],
+      )?.timeslots ?? [],
     [bookingData, selectedDate],
-  );
+  )
 
   const handleBooking = useCallback(
     (date: Date, time: string) => {
-      const [hours, minutes] = time.split(":").map(Number);
-      const bookingDate = new Date(date);
-      bookingDate.setHours(hours, minutes);
+      const [hours, minutes] = time.split(':').map(Number)
+      const bookingDate = new Date(date)
+      bookingDate.setHours(hours, minutes)
 
       mutate({
         body: {
@@ -218,10 +244,10 @@ function BookingCalendarContent({ specialistId, onSuccess }: BookingCalendarProp
           specialist_id: specialistId,
           notes: notes,
         },
-      });
+      })
     },
     [mutate, specialistId, notes],
-  );
+  )
 
   return (
     <div className="space-y-4">
@@ -238,7 +264,7 @@ function BookingCalendarContent({ specialistId, onSuccess }: BookingCalendarProp
         isLoading={isPending}
       />
     </div>
-  );
+  )
 }
 
 function BookingCalendar({ specialistId, onSuccess }: BookingCalendarProps) {
@@ -246,37 +272,44 @@ function BookingCalendar({ specialistId, onSuccess }: BookingCalendarProps) {
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary onReset={reset}>
-          <Suspense fallback={<LoadingSpinner message="Loading availability..." />}>
-            <BookingCalendarContent specialistId={specialistId} onSuccess={onSuccess} />
+          <Suspense
+            fallback={<LoadingSpinner message="Loading availability..." />}
+          >
+            <BookingCalendarContent
+              specialistId={specialistId}
+              onSuccess={onSuccess}
+            />
           </Suspense>
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>
-  );
+  )
 }
 
 export default function BookAppointmentDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedSpecialistId, setSelectedSpecialistId] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedSpecialistId, setSelectedSpecialistId] = useState<
+    string | null
+  >(null)
+  const [, startTransition] = useTransition()
 
   const handleSpecialistSelect = useCallback((specialistId: string) => {
     startTransition(() => {
-      setSelectedSpecialistId(specialistId);
-    });
-  }, []);
+      setSelectedSpecialistId(specialistId)
+    })
+  }, [])
 
   const handleBookingSuccess = useCallback(() => {
-    setIsOpen(false);
-    setSelectedSpecialistId(null);
-  }, []);
+    setIsOpen(false)
+    setSelectedSpecialistId(null)
+  }, [])
 
   const handleOpenChange = useCallback((open: boolean) => {
-    setIsOpen(open);
+    setIsOpen(open)
     if (!open) {
-      setSelectedSpecialistId(null);
+      setSelectedSpecialistId(null)
     }
-  }, []);
+  }, [])
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -299,10 +332,13 @@ export default function BookAppointmentDialog() {
           <SpecialistSelect onSelect={handleSpecialistSelect} />
 
           {selectedSpecialistId && (
-            <BookingCalendar specialistId={selectedSpecialistId} onSuccess={handleBookingSuccess} />
+            <BookingCalendar
+              specialistId={selectedSpecialistId}
+              onSuccess={handleBookingSuccess}
+            />
           )}
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

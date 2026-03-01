@@ -1,34 +1,34 @@
-import { defineConfig } from "vite";
-import { devtools } from "@tanstack/devtools-vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import viteReact from "@vitejs/plugin-react";
-import viteTsConfigPaths from "vite-tsconfig-paths";
-import tailwindcss from "@tailwindcss/vite";
-import { nitro } from "nitro/vite";
-import { fileURLToPath } from "node:url";
+import { defineConfig } from 'vite'
+import { devtools } from '@tanstack/devtools-vite'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteReact from '@vitejs/plugin-react'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
+import tailwindcss from '@tailwindcss/vite'
+import { nitro } from 'nitro/vite'
+import { fileURLToPath } from 'node:url'
 
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = process.env.NODE_ENV !== 'production'
 
 const config = defineConfig({
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   plugins: [
     tanstackStart(),
     devtools(),
     viteTsConfigPaths({
-      projects: ["./tsconfig.json"],
+      projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    isDev ? nitro({ preset: "bun" }) : nitro(),
+    isDev ? nitro({ preset: 'bun' }) : nitro(),
     viteReact({
       babel: {
-        plugins: ["babel-plugin-react-compiler"],
+        plugins: ['babel-plugin-react-compiler'],
       },
     }),
   ],
-});
+})
 
-export default config;
+export default config

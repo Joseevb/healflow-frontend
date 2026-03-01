@@ -1,23 +1,23 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin as adminPlugin, jwt, openAPI } from "better-auth/plugins";
-import { tanstackStartCookies } from "better-auth/tanstack-start";
-import Stripe from "stripe";
-import { stripe } from "@better-auth/stripe";
+import { betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { admin as adminPlugin, jwt, openAPI } from 'better-auth/plugins'
+import { tanstackStartCookies } from 'better-auth/tanstack-start'
+import Stripe from 'stripe'
+import { stripe } from '@better-auth/stripe'
 
-import { db } from "@/db";
-import { v7 } from "uuid";
+import { db } from '@/db'
+import { v7 } from 'uuid'
 
-import * as schema from "@/db/schemas";
-import { ac, admin, specialist, user } from "./auth-roles";
+import * as schema from '@/db/schemas'
+import { ac, admin, specialist, user } from './auth-roles'
 
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
+  apiVersion: '2026-02-25.clover',
+})
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: 'sqlite',
     schema,
     usePlural: true,
   }),
@@ -37,7 +37,7 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: true, requireEmailVerification: false },
   plugins: [
     jwt({
-      jwks: { keyPairConfig: { alg: "RS256" } },
+      jwks: { keyPairConfig: { alg: 'RS256' } },
     }),
     openAPI(),
     adminPlugin({
@@ -47,7 +47,7 @@ export const auth = betterAuth({
         admin,
         specialist,
       },
-      defaultRole: "client",
+      defaultRole: 'client',
     }),
     stripe({
       stripeClient,
@@ -57,11 +57,11 @@ export const auth = betterAuth({
         enabled: true,
         plans: [
           {
-            name: "monthly",
+            name: 'monthly',
             priceId: process.env.STRIPE_MONTHLY_PRICE_ID!,
           },
           {
-            name: "yearly",
+            name: 'yearly',
             priceId: process.env.STRIPE_YEARLY_PRICE_ID!,
           },
         ],
@@ -77,10 +77,10 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       onboardingCompleted: {
-        type: "boolean",
+        type: 'boolean',
         defaultValue: false,
       },
     },
   },
-  callbackURL: "/dashboard",
-});
+  callbackURL: '/dashboard',
+})

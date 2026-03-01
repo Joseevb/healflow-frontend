@@ -1,44 +1,44 @@
-import React from "react";
+import React from 'react'
 import type {
   FieldConfigs,
   FieldRenderApi,
   FormApi,
   Orientation,
   PrimitiveFieldConfig,
-} from "@/types/form-types";
-import type { LayoutNode } from "@/lib/form-layout";
+} from '@/types/form-types'
+import type { LayoutNode } from '@/lib/form-layout'
 import {
   FieldDescription,
   FieldGroup,
   FieldLegend,
   FieldSet,
   FieldTitle,
-} from "@/components/ui/field";
-import { buildLayoutTree } from "@/lib/form-layout";
-import { cn } from "@/lib/utils";
-import { withForm } from "@/hooks/form-context";
+} from '@/components/ui/field'
+import { buildLayoutTree } from '@/lib/form-layout'
+import { cn } from '@/lib/utils'
+import { withForm } from '@/hooks/form-context'
 
-const getOrientationClasses = (orientation: Orientation = "vertical") => {
+const getOrientationClasses = (orientation: Orientation = 'vertical') => {
   switch (orientation) {
-    case "horizontal":
-      return "grid grid-cols-[repeat(auto-fit,minmax(0,1fr))] gap-4 items-end";
-    case "responsive":
-      return "grid grid-cols-1 md:grid-cols-2 gap-4";
-    case "vertical":
+    case 'horizontal':
+      return 'grid grid-cols-[repeat(auto-fit,minmax(0,1fr))] gap-4 items-end'
+    case 'responsive':
+      return 'grid grid-cols-1 md:grid-cols-2 gap-4'
+    case 'vertical':
     default:
-      return "flex flex-col gap-4";
+      return 'flex flex-col gap-4'
   }
-};
+}
 
 function FieldContentRenderer({
   field,
   config,
 }: {
-  field: FieldRenderApi;
-  config: PrimitiveFieldConfig<unknown>;
+  field: FieldRenderApi
+  config: PrimitiveFieldConfig<unknown>
 }) {
   switch (config.type) {
-    case "textarea":
+    case 'textarea':
       return (
         <field.TextAreaField
           rows={config.rows}
@@ -48,8 +48,8 @@ function FieldContentRenderer({
           description={config.description}
           placeholder={config.placeholder}
         />
-      );
-    case "select":
+      )
+    case 'select':
       return (
         <field.SelectField
           label={config.label}
@@ -58,8 +58,8 @@ function FieldContentRenderer({
           description={config.description}
           placeholder={config.placeholder}
         />
-      );
-    case "radio":
+      )
+    case 'radio':
       return (
         <field.RadioField
           size={config.size}
@@ -70,8 +70,8 @@ function FieldContentRenderer({
           description={config.description}
           placeholder={config.placeholder}
         />
-      );
-    case "checkbox":
+      )
+    case 'checkbox':
       return (
         <field.CheckboxField
           label={config.label}
@@ -80,8 +80,8 @@ function FieldContentRenderer({
           description={config.description}
           placeholder={config.placeholder}
         />
-      );
-    case "checkbox-group":
+      )
+    case 'checkbox-group':
       return (
         <field.CheckboxGroupField
           items={config.items}
@@ -91,8 +91,8 @@ function FieldContentRenderer({
           description={config.description}
           placeholder={config.placeholder}
         />
-      );
-    case "switch":
+      )
+    case 'switch':
       return (
         <field.SwitchField
           label={config.label}
@@ -100,8 +100,8 @@ function FieldContentRenderer({
           orientation={config.orientation}
           description={config.description}
         />
-      );
-    case "slider":
+      )
+    case 'slider':
       return (
         <field.SliderField
           min={config.min}
@@ -113,9 +113,9 @@ function FieldContentRenderer({
           description={config.description}
           range={config.range}
         />
-      );
-    case "custom":
-      return config.render;
+      )
+    case 'custom':
+      return config.render
     default:
       return (
         <field.TextField
@@ -126,42 +126,53 @@ function FieldContentRenderer({
           autocomplete={config.autocomplete}
           icon={config.icon}
         />
-      );
+      )
   }
 }
 
 function LayoutNodeRenderer({
   node,
   form,
-  parentPath = "",
+  parentPath = '',
 }: {
-  node: LayoutNode;
-  form: FormApi;
-  parentPath?: string;
+  node: LayoutNode
+  form: FormApi
+  parentPath?: string
 }) {
   switch (node.type) {
-    case "set":
+    case 'set':
       return (
         <FieldSet className={node.config.controlClassName}>
-          {node.config.legend && <FieldLegend>{node.config.legend}</FieldLegend>}
+          {node.config.legend && (
+            <FieldLegend>{node.config.legend}</FieldLegend>
+          )}
           {node.config.description && (
             <FieldDescription>{node.config.description}</FieldDescription>
           )}
           <div className="flex flex-col gap-4">
             {node.children.map((child, idx) => (
-              <LayoutNodeRenderer key={idx} node={child} form={form} parentPath={parentPath} />
+              <LayoutNodeRenderer
+                key={idx}
+                node={child}
+                form={form}
+                parentPath={parentPath}
+              />
             ))}
           </div>
         </FieldSet>
-      );
-    case "group": {
-      const orientationClass = getOrientationClasses(node.config.orientation);
+      )
+    case 'group': {
+      const orientationClass = getOrientationClasses(node.config.orientation)
 
       return (
         <FieldGroup className={cn(orientationClass, node.config.className)}>
           {node.children.map((child, idx) => (
             <React.Fragment key={idx}>
-              <LayoutNodeRenderer node={child} form={form} parentPath={parentPath} />
+              <LayoutNodeRenderer
+                node={child}
+                form={form}
+                parentPath={parentPath}
+              />
               {/* Handle Separator Logic if needed */}
               {node.config.separator && idx < node.children.length - 1 && (
                 <div className="w-px bg-border h-full mx-2 hidden md:block" />
@@ -169,16 +180,16 @@ function LayoutNodeRenderer({
             </React.Fragment>
           ))}
         </FieldGroup>
-      );
+      )
     }
-    case "field": {
-      const fullPath = parentPath ? `${parentPath}.${node.name}` : node.name;
+    case 'field': {
+      const fullPath = parentPath ? `${parentPath}.${node.name}` : node.name
 
       // Handle Nested Objects Recursively
-      if (node.config.type === "object") {
-        const nestedLayout = buildLayoutTree(node.config.fields);
+      if (node.config.type === 'object') {
+        const nestedLayout = buildLayoutTree(node.config.fields)
         return (
-          <div className={cn("space-y-4", node.config.className)}>
+          <div className={cn('space-y-4', node.config.className)}>
             {node.config.title && <FieldTitle>{node.config.title}</FieldTitle>}
             {node.config.description && (
               <FieldDescription>{node.config.description}</FieldDescription>
@@ -192,7 +203,7 @@ function LayoutNodeRenderer({
               />
             ))}
           </div>
-        );
+        )
       }
 
       // Standard Fields
@@ -205,10 +216,10 @@ function LayoutNodeRenderer({
             />
           )}
         </form.AppField>
-      );
+      )
     }
     default:
-      return null;
+      return null
   }
 }
 
@@ -217,10 +228,13 @@ export function FormBuilder<TData extends Record<string, unknown>>({
   fieldConfigs,
   form,
 }: {
-  fieldConfigs: FieldConfigs<TData>;
-  form: FormApi;
+  fieldConfigs: FieldConfigs<TData>
+  form: FormApi
 }) {
-  const layout = React.useMemo(() => buildLayoutTree(fieldConfigs), [fieldConfigs]);
+  const layout = React.useMemo(
+    () => buildLayoutTree(fieldConfigs),
+    [fieldConfigs],
+  )
 
   return (
     <div className="space-y-6">
@@ -228,17 +242,17 @@ export function FormBuilder<TData extends Record<string, unknown>>({
         <LayoutNodeRenderer key={idx} node={node} form={form} />
       ))}
     </div>
-  );
+  )
 }
 
 export const dynamicFormFactory = <TFormData extends Record<string, unknown>>({
   fieldConfigs,
   defaultValues,
 }: {
-  title?: string;
-  description?: string;
-  fieldConfigs: FieldConfigs<TFormData>;
-  defaultValues: TFormData;
+  title?: string
+  description?: string
+  fieldConfigs: FieldConfigs<TFormData>
+  defaultValues: TFormData
 }) =>
   withForm({
     props: {
@@ -252,7 +266,7 @@ export const dynamicFormFactory = <TFormData extends Record<string, unknown>>({
             {buttonGroup}
           </form.Form>
         </form.AppForm>
-      );
+      )
     },
     defaultValues,
-  });
+  })

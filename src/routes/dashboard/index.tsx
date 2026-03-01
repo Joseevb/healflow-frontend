@@ -1,5 +1,5 @@
-import { Link, createFileRoute, redirect } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { Link, createFileRoute, redirect } from '@tanstack/react-router'
+import { useMemo } from 'react'
 import {
   Activity,
   AlertTriangle,
@@ -10,34 +10,44 @@ import {
   Heart,
   Pill,
   RefreshCw,
-} from "lucide-react";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import type { LucideIcon } from "lucide-react";
-import type { AppointmentResponse, HealthMetricResponse } from "@/client";
-import { getSessionData } from "@/lib/auth-session";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+} from 'lucide-react'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
+import type { LucideIcon } from 'lucide-react'
+import type { AppointmentResponse, HealthMetricResponse } from '@/client'
+import { getSessionData } from '@/lib/auth-session'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   getLatestHealthScoreOptions,
   getRecentHealthMetricsOptions,
   getUpcomingAppointmentsOptions,
   getUserHealthMetricsOptions,
   getUserMedicinesOptions,
-} from "@/client/@tanstack/react-query.gen";
+} from '@/client/@tanstack/react-query.gen'
 
 // Route Definition
 
-export const Route = createFileRoute("/dashboard/")({
+export const Route = createFileRoute('/dashboard/')({
   component: RouteComponent,
   loader: async ({ context }) => {
-    const sessionData = await getSessionData();
+    const sessionData = await getSessionData()
 
-    if (sessionData.createdUserId && sessionData.state && sessionData.state !== "success") {
+    if (
+      sessionData.createdUserId &&
+      sessionData.state &&
+      sessionData.state !== 'success'
+    ) {
       throw redirect({
-        to: "/auth/sign-up/user-data",
-      });
+        to: '/auth/sign-up/user-data',
+      })
     }
 
     // Prefetch critical dashboard data in parallel for SSR
@@ -47,7 +57,7 @@ export const Route = createFileRoute("/dashboard/")({
       context.queryClient.ensureQueryData(getUserMedicinesOptions()),
       context.queryClient.ensureQueryData(getUserHealthMetricsOptions()),
       context.queryClient.ensureQueryData(getRecentHealthMetricsOptions()),
-    ]);
+    ])
 
     // Prefetch health score but don't fail the page load if it's missing (404)
     // This is expected for new users who haven't had health metrics recorded yet
@@ -57,12 +67,15 @@ export const Route = createFileRoute("/dashboard/")({
       })
       .catch((error) => {
         // Log but don't throw - gracefully handle missing health score
-        console.warn("Health score not available (expected for new users):", error);
-      });
+        console.warn(
+          'Health score not available (expected for new users):',
+          error,
+        )
+      })
   },
   pendingComponent: LoadingComponent,
   errorComponent: ErrorBoundaryComponent,
-});
+})
 
 // Loading Component
 
@@ -139,68 +152,70 @@ function LoadingComponent() {
         </Card>
       </section>
     </div>
-  );
+  )
 }
 
 // Error Component
 
 function ErrorBoundaryComponent({ error }: { error: Error }) {
   // Try to extract status code from error object
-  const errorStatus = (error as any)?.status;
+  const errorStatus = (error as any)?.status
 
   // Track error for analytics
-  console.count(`DASHBOARD_ERROR_${errorStatus || "UNKNOWN"}`);
+  console.count(`DASHBOARD_ERROR_${errorStatus || 'UNKNOWN'}`)
 
   // Define user-friendly messages per status code
   const getErrorConfig = (status?: number) => {
     switch (status) {
       case 401:
         return {
-          title: "Authentication Required",
-          message: "Your session has expired. Please sign in again to access your dashboard.",
-          iconColor: "text-yellow-600 dark:text-yellow-400",
-          iconBg: "bg-yellow-100 dark:bg-yellow-900/30",
-          cardBg: "bg-yellow-50/50 dark:bg-yellow-900/10",
-          borderColor: "border-yellow-200 dark:border-yellow-800",
+          title: 'Authentication Required',
+          message:
+            'Your session has expired. Please sign in again to access your dashboard.',
+          iconColor: 'text-yellow-600 dark:text-yellow-400',
+          iconBg: 'bg-yellow-100 dark:bg-yellow-900/30',
+          cardBg: 'bg-yellow-50/50 dark:bg-yellow-900/10',
+          borderColor: 'border-yellow-200 dark:border-yellow-800',
           showSignInButton: true,
-        };
+        }
       case 404:
         return {
-          title: "Data Not Available",
+          title: 'Data Not Available',
           message:
-            "Some of your dashboard data is not available yet. This is normal for new accounts. Your data will appear here once you have appointments or health metrics recorded by your doctor.",
-          iconColor: "text-blue-600 dark:text-blue-400",
-          iconBg: "bg-blue-100 dark:bg-blue-900/30",
-          cardBg: "bg-blue-50/50 dark:bg-blue-900/10",
-          borderColor: "border-blue-200 dark:border-blue-800",
+            'Some of your dashboard data is not available yet. This is normal for new accounts. Your data will appear here once you have appointments or health metrics recorded by your doctor.',
+          iconColor: 'text-blue-600 dark:text-blue-400',
+          iconBg: 'bg-blue-100 dark:bg-blue-900/30',
+          cardBg: 'bg-blue-50/50 dark:bg-blue-900/10',
+          borderColor: 'border-blue-200 dark:border-blue-800',
           showSignInButton: false,
-        };
+        }
       case 500:
       case 503:
         return {
-          title: "Server Error",
-          message: "Our servers are experiencing issues. Please try again in a few moments.",
-          iconColor: "text-red-600 dark:text-red-400",
-          iconBg: "bg-red-100 dark:bg-red-900/30",
-          cardBg: "bg-red-50/50 dark:bg-red-900/10",
-          borderColor: "border-red-200 dark:border-red-800",
+          title: 'Server Error',
+          message:
+            'Our servers are experiencing issues. Please try again in a few moments.',
+          iconColor: 'text-red-600 dark:text-red-400',
+          iconBg: 'bg-red-100 dark:bg-red-900/30',
+          cardBg: 'bg-red-50/50 dark:bg-red-900/10',
+          borderColor: 'border-red-200 dark:border-red-800',
           showSignInButton: false,
-        };
+        }
       default:
         return {
-          title: "Failed to Load Dashboard",
+          title: 'Failed to Load Dashboard',
           message:
             "We couldn't retrieve your dashboard information. Please try refreshing the page or contact support if the problem persists.",
-          iconColor: "text-red-600 dark:text-red-400",
-          iconBg: "bg-red-100 dark:bg-red-900/30",
-          cardBg: "bg-red-50/50 dark:bg-red-900/10",
-          borderColor: "border-red-200 dark:border-red-800",
+          iconColor: 'text-red-600 dark:text-red-400',
+          iconBg: 'bg-red-100 dark:bg-red-900/30',
+          cardBg: 'bg-red-50/50 dark:bg-red-900/10',
+          borderColor: 'border-red-200 dark:border-red-800',
           showSignInButton: false,
-        };
+        }
     }
-  };
+  }
 
-  const config = getErrorConfig(errorStatus);
+  const config = getErrorConfig(errorStatus)
 
   return (
     <div className="space-y-8">
@@ -213,7 +228,9 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
             </div>
             <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           </div>
-          <p className="text-muted-foreground max-w-md">Your health overview and quick actions</p>
+          <p className="text-muted-foreground max-w-md">
+            Your health overview and quick actions
+          </p>
         </div>
       </header>
 
@@ -228,7 +245,9 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
               <h3 className="text-xl font-semibold">{config.title}</h3>
               <p className="text-muted-foreground max-w-md">{config.message}</p>
               {errorStatus && (
-                <p className="text-xs text-muted-foreground mt-2">Error code: {errorStatus}</p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Error code: {errorStatus}
+                </p>
               )}
               <details className="mt-4">
                 <summary className="text-sm text-muted-foreground cursor-pointer hover:underline">
@@ -239,7 +258,7 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
                     {
                       message: error.message,
                       status: errorStatus,
-                      stack: error.stack?.split("\n").slice(0, 5).join("\n"),
+                      stack: error.stack?.split('\n').slice(0, 5).join('\n'),
                     },
                     null,
                     2,
@@ -248,14 +267,17 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
               </details>
             </div>
             <div className="flex gap-3 mt-4">
-              <Button variant="outline" onClick={() => window.location.reload()}>
+              <Button
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
                 <RefreshCw className="size-4 mr-2" />
                 Refresh Page
               </Button>
               {config.showSignInButton && (
                 <Button
                   onClick={() => {
-                    window.location.href = "/auth/sign-in";
+                    window.location.href = '/auth/sign-in'
                   }}
                 >
                   Sign In
@@ -266,76 +288,86 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
 
 // Helper Functions
 
 function formatRelativeTime(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
 
-  if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins} ${diffMins === 1 ? "minute" : "minutes"} ago`;
-  if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? "hour" : "hours"} ago`;
-  if (diffDays === 1) return "Yesterday";
-  if (diffDays < 7) return `${diffDays} days ago`;
-  return date.toLocaleDateString();
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60)
+    return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`
+  if (diffHours < 24)
+    return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return `${diffDays} days ago`
+  return date.toLocaleDateString()
 }
 
 function formatMetricTitle(metricType: string): string {
   const titleMap: Record<string, string> = {
-    BLOOD_PRESSURE_SYSTOLIC: "Blood Pressure (Systolic)",
-    BLOOD_PRESSURE_DIASTOLIC: "Blood Pressure (Diastolic)",
-    HEART_RATE: "Heart Rate",
-    OXYGEN_SATURATION: "Oxygen Saturation",
-    WEIGHT: "Weight",
-    HEIGHT: "Height",
-    BMI: "BMI",
-    BLOOD_GLUCOSE: "Blood Glucose",
-    HBA1C: "HbA1c",
-    CHOLESTEROL_TOTAL: "Total Cholesterol",
-    CHOLESTEROL_LDL: "LDL Cholesterol",
-    CHOLESTEROL_HDL: "HDL Cholesterol",
-    TRIGLYCERIDES: "Triglycerides",
-    BODY_TEMPERATURE: "Body Temperature",
-    RESPIRATORY_RATE: "Respiratory Rate",
-    SLEEP_HOURS: "Sleep Duration",
-    EXERCISE_MINUTES: "Exercise",
-    WATER_INTAKE: "Water Intake",
-    STEPS: "Steps",
-  };
-  return titleMap[metricType] || metricType.replace(/_/g, " ");
+    BLOOD_PRESSURE_SYSTOLIC: 'Blood Pressure (Systolic)',
+    BLOOD_PRESSURE_DIASTOLIC: 'Blood Pressure (Diastolic)',
+    HEART_RATE: 'Heart Rate',
+    OXYGEN_SATURATION: 'Oxygen Saturation',
+    WEIGHT: 'Weight',
+    HEIGHT: 'Height',
+    BMI: 'BMI',
+    BLOOD_GLUCOSE: 'Blood Glucose',
+    HBA1C: 'HbA1c',
+    CHOLESTEROL_TOTAL: 'Total Cholesterol',
+    CHOLESTEROL_LDL: 'LDL Cholesterol',
+    CHOLESTEROL_HDL: 'HDL Cholesterol',
+    TRIGLYCERIDES: 'Triglycerides',
+    BODY_TEMPERATURE: 'Body Temperature',
+    RESPIRATORY_RATE: 'Respiratory Rate',
+    SLEEP_HOURS: 'Sleep Duration',
+    EXERCISE_MINUTES: 'Exercise',
+    WATER_INTAKE: 'Water Intake',
+    STEPS: 'Steps',
+  }
+  return titleMap[metricType] || metricType.replace(/_/g, ' ')
 }
 
 function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good morning! 👋";
-  if (hour < 18) return "Good afternoon! 👋";
-  return "Good evening! 👋";
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good morning! 👋'
+  if (hour < 18) return 'Good afternoon! 👋'
+  return 'Good evening! 👋'
 }
 
 // Internal Components
 
 interface StatCardProps {
-  icon: LucideIcon;
-  iconBg: string;
-  iconColor: string;
-  label: string;
-  value: string | number;
-  sublabel?: string;
+  icon: LucideIcon
+  iconBg: string
+  iconColor: string
+  label: string
+  value: string | number
+  sublabel?: string
   trend?: {
-    icon: LucideIcon;
-    value: string;
-    color: string;
-  };
+    icon: LucideIcon
+    value: string
+    color: string
+  }
 }
 
-function StatCard({ icon: Icon, iconBg, iconColor, label, value, sublabel, trend }: StatCardProps) {
+function StatCard({
+  icon: Icon,
+  iconBg,
+  iconColor,
+  label,
+  value,
+  sublabel,
+  trend,
+}: StatCardProps) {
   return (
     <Card className="group border-0 shadow-md hover:shadow-lg dark:bg-slate-800 dark:border-slate-700 transition-all duration-300">
       <CardContent className="p-6">
@@ -348,9 +380,13 @@ function StatCard({ icon: Icon, iconBg, iconColor, label, value, sublabel, trend
           <div>
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
             <p className="text-2xl font-bold">{value}</p>
-            {sublabel && <p className="text-xs text-muted-foreground">{sublabel}</p>}
+            {sublabel && (
+              <p className="text-xs text-muted-foreground">{sublabel}</p>
+            )}
             {trend && (
-              <p className={`text-xs ${trend.color} flex items-center gap-1 mt-0.5`}>
+              <p
+                className={`text-xs ${trend.color} flex items-center gap-1 mt-0.5`}
+              >
                 <trend.icon className="size-3" /> {trend.value}
               </p>
             )}
@@ -358,7 +394,7 @@ function StatCard({ icon: Icon, iconBg, iconColor, label, value, sublabel, trend
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
 
 function WelcomeHero() {
@@ -373,10 +409,12 @@ function WelcomeHero() {
           <Heart className="size-3 mr-1" />
           Welcome back
         </Badge>
-        <h1 className="text-3xl font-bold tracking-tight mb-2">{getGreeting()}</h1>
+        <h1 className="text-3xl font-bold tracking-tight mb-2">
+          {getGreeting()}
+        </h1>
         <p className="text-blue-100 text-lg max-w-xl">
-          Your health dashboard is ready. Track your appointments, medications, and health metrics
-          all in one place.
+          Your health dashboard is ready. Track your appointments, medications,
+          and health metrics all in one place.
         </p>
         <div className="flex flex-wrap gap-3 mt-6">
           <Button
@@ -384,7 +422,10 @@ function WelcomeHero() {
             variant="secondary"
             className="bg-white text-blue-700 hover:bg-blue-50 border-0"
           >
-            <Link to="/dashboard/appointments" className="flex items-center gap-2">
+            <Link
+              to="/dashboard/appointments"
+              className="flex items-center gap-2"
+            >
               <Calendar className="size-4" />
               Book Appointment
             </Link>
@@ -398,19 +439,19 @@ function WelcomeHero() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 interface QuickActionCardProps {
-  icon: LucideIcon;
-  iconBg: string;
-  iconColor: string;
-  title: string;
-  description: string;
-  linkTo?: string;
-  onClick?: () => void;
-  colorScheme: "blue" | "purple" | "green";
-  buttonLabel: string;
+  icon: LucideIcon
+  iconBg: string
+  iconColor: string
+  title: string
+  description: string
+  linkTo?: string
+  onClick?: () => void
+  colorScheme: 'blue' | 'purple' | 'green'
+  buttonLabel: string
 }
 
 function QuickActionCard({
@@ -425,18 +466,18 @@ function QuickActionCard({
   buttonLabel,
 }: QuickActionCardProps) {
   const hoverClasses = {
-    blue: "group-hover:bg-blue-50 group-hover:border-blue-200 dark:group-hover:bg-blue-900/20 dark:group-hover:border-blue-700",
+    blue: 'group-hover:bg-blue-50 group-hover:border-blue-200 dark:group-hover:bg-blue-900/20 dark:group-hover:border-blue-700',
     purple:
-      "group-hover:bg-purple-50 group-hover:border-purple-200 dark:group-hover:bg-purple-900/20 dark:group-hover:border-purple-700",
+      'group-hover:bg-purple-50 group-hover:border-purple-200 dark:group-hover:bg-purple-900/20 dark:group-hover:border-purple-700',
     green:
-      "group-hover:bg-green-50 group-hover:border-green-200 dark:group-hover:bg-green-900/20 dark:group-hover:border-green-700",
-  };
+      'group-hover:bg-green-50 group-hover:border-green-200 dark:group-hover:bg-green-900/20 dark:group-hover:border-green-700',
+  }
 
   const shadowClasses = {
-    blue: "dark:hover:shadow-blue-500/10",
-    purple: "dark:hover:shadow-purple-500/10",
-    green: "dark:hover:shadow-green-500/10",
-  };
+    blue: 'dark:hover:shadow-blue-500/10',
+    purple: 'dark:hover:shadow-purple-500/10',
+    green: 'dark:hover:shadow-green-500/10',
+  }
 
   const content = (
     <>
@@ -456,7 +497,10 @@ function QuickActionCard({
           asChild={!!linkTo}
         >
           {linkTo ? (
-            <Link to={linkTo} className="flex items-center justify-center gap-2">
+            <Link
+              to={linkTo}
+              className="flex items-center justify-center gap-2"
+            >
               {buttonLabel}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
@@ -473,7 +517,7 @@ function QuickActionCard({
         </Button>
       </CardContent>
     </>
-  );
+  )
 
   return (
     <Card
@@ -481,16 +525,16 @@ function QuickActionCard({
     >
       {content}
     </Card>
-  );
+  )
 }
 
 interface ActivityItemProps {
-  icon: LucideIcon;
-  iconBg: string;
-  iconColor: string;
-  title: string;
-  description: string;
-  timestamp: string;
+  icon: LucideIcon
+  iconBg: string
+  iconColor: string
+  title: string
+  description: string
+  timestamp: string
 }
 
 function ActivityItem({
@@ -515,16 +559,20 @@ function ActivityItem({
         {timestamp}
       </div>
     </div>
-  );
+  )
 }
 
 interface SectionHeaderProps {
-  title: string;
-  actionLabel?: string;
-  onActionClick?: () => void;
+  title: string
+  actionLabel?: string
+  onActionClick?: () => void
 }
 
-function SectionHeader({ title, actionLabel, onActionClick }: SectionHeaderProps) {
+function SectionHeader({
+  title,
+  actionLabel,
+  onActionClick,
+}: SectionHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-4">
       <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
@@ -539,86 +587,101 @@ function SectionHeader({ title, actionLabel, onActionClick }: SectionHeaderProps
         </Button>
       )}
     </div>
-  );
+  )
 }
 
 // Types for Recent Activity
 
 interface DashboardActivity {
-  type: "appointment" | "metric";
-  icon: LucideIcon;
-  iconBg: string;
-  iconColor: string;
-  title: string;
-  description: string;
-  timestamp: string;
-  rawTimestamp: string;
+  type: 'appointment' | 'metric'
+  icon: LucideIcon
+  iconBg: string
+  iconColor: string
+  title: string
+  description: string
+  timestamp: string
+  rawTimestamp: string
 }
 
 // Main Component
 
 function RouteComponent() {
   // Fetch critical data with useSuspenseQuery (will throw if fails)
-  const { data: upcomingAppointments } = useSuspenseQuery(getUpcomingAppointmentsOptions());
-  const { data: medications } = useSuspenseQuery(getUserMedicinesOptions());
-  const { data: allMetrics } = useSuspenseQuery(getUserHealthMetricsOptions());
-  const { data: recentMetrics } = useSuspenseQuery(getRecentHealthMetricsOptions());
+  const { data: upcomingAppointments } = useSuspenseQuery(
+    getUpcomingAppointmentsOptions(),
+  )
+  const { data: medications } = useSuspenseQuery(getUserMedicinesOptions())
+  const { data: allMetrics } = useSuspenseQuery(getUserHealthMetricsOptions())
+  const { data: recentMetrics } = useSuspenseQuery(
+    getRecentHealthMetricsOptions(),
+  )
 
   // Fetch health score with optional query (won't crash on 404)
   const { data: healthScore, isError: isHealthScoreError } = useQuery({
     ...getLatestHealthScoreOptions(),
     retry: false,
-  });
+  })
 
   // Calculate stats with graceful fallback for missing health score
   const stats = useMemo(
     () => ({
       appointmentsCount: upcomingAppointments.length,
-      healthScore: isHealthScoreError || !healthScore ? 0 : healthScore.overall_score,
+      healthScore:
+        isHealthScoreError || !healthScore ? 0 : healthScore.overall_score,
       hasHealthScore: !isHealthScoreError && !!healthScore,
       medicationsCount: medications.length,
       metricsCount: allMetrics.length,
     }),
-    [healthScore, isHealthScoreError, upcomingAppointments, medications, allMetrics],
-  );
+    [
+      healthScore,
+      isHealthScoreError,
+      upcomingAppointments,
+      medications,
+      allMetrics,
+    ],
+  )
 
   // Transform recent activity
   const recentActivity = useMemo(() => {
-    const activities: Array<DashboardActivity> = [];
+    const activities: Array<DashboardActivity> = []
 
     // Add recent appointments
     upcomingAppointments.slice(0, 2).forEach((apt: AppointmentResponse) => {
       activities.push({
-        type: "appointment",
+        type: 'appointment',
         icon: Calendar,
-        iconBg: "bg-blue-100 dark:bg-blue-900/20",
-        iconColor: "text-blue-600",
+        iconBg: 'bg-blue-100 dark:bg-blue-900/20',
+        iconColor: 'text-blue-600',
         title: `Appointment with ${apt.specialist.name}`,
         description: apt.specialist.specialty,
         timestamp: formatRelativeTime(apt.appointment_date),
         rawTimestamp: apt.appointment_date,
-      });
-    });
+      })
+    })
 
     // Add recent health metrics
     recentMetrics.slice(0, 5).forEach((metric: HealthMetricResponse) => {
       activities.push({
-        type: "metric",
+        type: 'metric',
         icon: Activity,
-        iconBg: "bg-green-100 dark:bg-green-900/20",
-        iconColor: "text-green-600",
+        iconBg: 'bg-green-100 dark:bg-green-900/20',
+        iconColor: 'text-green-600',
         title: `${formatMetricTitle(metric.metric_type)} recorded`,
         description: `${metric.value} ${metric.unit}`,
         timestamp: formatRelativeTime(metric.recorded_at),
         rawTimestamp: metric.recorded_at,
-      });
-    });
+      })
+    })
 
     // Sort by timestamp descending, take top 5
     return activities
-      .sort((a, b) => new Date(b.rawTimestamp).getTime() - new Date(a.rawTimestamp).getTime())
-      .slice(0, 5);
-  }, [upcomingAppointments, recentMetrics]);
+      .sort(
+        (a, b) =>
+          new Date(b.rawTimestamp).getTime() -
+          new Date(a.rawTimestamp).getTime(),
+      )
+      .slice(0, 5)
+  }, [upcomingAppointments, recentMetrics])
 
   return (
     <div className="space-y-8">
@@ -640,8 +703,8 @@ function RouteComponent() {
           iconBg="bg-green-100 dark:bg-green-900/20"
           iconColor="text-green-600"
           label="Health Score"
-          value={stats.hasHealthScore ? stats.healthScore : "--"}
-          sublabel={stats.hasHealthScore ? undefined : "No data yet"}
+          value={stats.hasHealthScore ? stats.healthScore : '--'}
+          sublabel={stats.hasHealthScore ? undefined : 'No data yet'}
         />
         <StatCard
           icon={Pill}
@@ -710,12 +773,14 @@ function RouteComponent() {
               <div className="p-8 text-center text-muted-foreground">
                 <Activity className="size-12 mx-auto mb-3 opacity-50" />
                 <p className="font-medium">No recent activity</p>
-                <p className="text-sm">Your recent health activities will appear here</p>
+                <p className="text-sm">
+                  Your recent health activities will appear here
+                </p>
               </div>
             )}
           </CardContent>
         </Card>
       </section>
     </div>
-  );
+  )
 }

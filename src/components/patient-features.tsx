@@ -1,15 +1,33 @@
-import { Activity, Calendar, FileText, MessageSquare, Pill, Shield } from "lucide-react";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { H2, Paragraph } from "@/components/ui/typography";
+import {
+  Activity,
+  Calendar,
+  FileText,
+  MessageSquare,
+  Pill,
+  Shield,
+} from 'lucide-react'
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { H2, Paragraph } from '@/components/ui/typography'
 
 export function PatientFeatures() {
   return (
-    <section id="features" className="py-20 bg-gray-50 dark:bg-slate-900 -mx-10">
+    <section
+      id="features"
+      className="py-20 bg-gray-50 dark:bg-slate-900 -mx-10"
+    >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
-          <H2 className="text-4xl font-bold mb-4 border-none pb-0">For Patients</H2>
+          <H2 className="text-4xl font-bold mb-4 border-none pb-0">
+            For Patients
+          </H2>
           <Paragraph className="text-xl text-gray-600 dark:text-slate-300 max-w-2xl mx-auto">
-            Take control of your healthcare journey with our comprehensive patient platform
+            Take control of your healthcare journey with our comprehensive
+            patient platform
           </Paragraph>
         </div>
 
@@ -21,8 +39,8 @@ export function PatientFeatures() {
               </div>
               <CardTitle>Book Appointments</CardTitle>
               <CardDescription>
-                Schedule appointments with your preferred doctors and specialists with just a few
-                clicks
+                Schedule appointments with your preferred doctors and
+                specialists with just a few clicks
               </CardDescription>
             </CardHeader>
           </Card>
@@ -34,7 +52,8 @@ export function PatientFeatures() {
               </div>
               <CardTitle>Medical History</CardTitle>
               <CardDescription>
-                Access your complete medical records, test results, and treatment history anytime
+                Access your complete medical records, test results, and
+                treatment history anytime
               </CardDescription>
             </CardHeader>
           </Card>
@@ -46,7 +65,8 @@ export function PatientFeatures() {
               </div>
               <CardTitle>Prescription Management</CardTitle>
               <CardDescription>
-                Track your medications, set reminders, and manage prescription refills
+                Track your medications, set reminders, and manage prescription
+                refills
               </CardDescription>
             </CardHeader>
           </Card>
@@ -58,7 +78,8 @@ export function PatientFeatures() {
               </div>
               <CardTitle>Health Monitoring</CardTitle>
               <CardDescription>
-                Track vital signs, symptoms, and health metrics with integrated monitoring tools
+                Track vital signs, symptoms, and health metrics with integrated
+                monitoring tools
               </CardDescription>
             </CardHeader>
           </Card>
@@ -70,7 +91,8 @@ export function PatientFeatures() {
               </div>
               <CardTitle>Secure Messaging</CardTitle>
               <CardDescription>
-                Communicate directly with your healthcare providers through secure messaging
+                Communicate directly with your healthcare providers through
+                secure messaging
               </CardDescription>
             </CardHeader>
           </Card>
@@ -82,12 +104,13 @@ export function PatientFeatures() {
               </div>
               <CardTitle>Privacy & Security</CardTitle>
               <CardDescription>
-                Your health data is protected with enterprise-grade security and HIPAA compliance
+                Your health data is protected with enterprise-grade security and
+                HIPAA compliance
               </CardDescription>
             </CardHeader>
           </Card>
         </div>
       </div>
     </section>
-  );
+  )
 }

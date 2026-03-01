@@ -1,15 +1,15 @@
 // src/lib/storage/index.ts
-import { Effect } from "effect";
-import { makeStorageLayer } from "./layer";
-import { ImageStorageLayer } from "./types";
-import type { ImageStorage } from "./types";
+import { Effect } from 'effect'
+import { makeStorageLayer } from './layer'
+import { ImageStorageLayer } from './types'
+import type { ImageStorage } from './types'
 
-const env = process.env;
+const env = process.env
 
 export const StorageLive = makeStorageLayer(
-  env.STORAGE_PROVIDER! === "s3"
+  env.STORAGE_PROVIDER! === 's3'
     ? {
-        provider: "s3",
+        provider: 's3',
         s3: {
           region: env.S3_REGION!,
           bucket: env.S3_BUCKET!,
@@ -20,18 +20,18 @@ export const StorageLive = makeStorageLayer(
         },
       }
     : {
-        provider: "local",
+        provider: 'local',
         local: {
           basePath: env.LOCAL_STORAGE_PATH!,
           publicUrl: env.LOCAL_PUBLIC_URL!,
         },
       },
-);
+)
 
 export const storage: ImageStorage = Effect.runSync(
   Effect.gen(function* () {
-    return yield* ImageStorageLayer;
+    return yield* ImageStorageLayer
   }).pipe(Effect.provide(StorageLive)),
-);
+)
 
-export { ImageStorageLayer };
+export { ImageStorageLayer }

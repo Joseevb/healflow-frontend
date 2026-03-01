@@ -1,5 +1,5 @@
-import { Award, Heart, TrendingUp } from "lucide-react";
-import { H2, H3, Paragraph } from "@/components/ui/typography";
+import { Award, Heart, TrendingUp } from 'lucide-react'
+import { H2, H3, Paragraph } from '@/components/ui/typography'
 
 export function TrustIndicators() {
   return (
@@ -10,7 +10,8 @@ export function TrustIndicators() {
             Trusted by Healthcare Leaders
           </H2>
           <Paragraph className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Join thousands of healthcare providers and patients who trust our platform
+            Join thousands of healthcare providers and patients who trust our
+            platform
           </Paragraph>
         </div>
 
@@ -21,7 +22,8 @@ export function TrustIndicators() {
             </div>
             <H3 className="text-white mb-2">HIPAA Compliant</H3>
             <Paragraph className="text-blue-100">
-              Fully compliant with healthcare privacy regulations and security standards
+              Fully compliant with healthcare privacy regulations and security
+              standards
             </Paragraph>
           </div>
 
@@ -31,7 +33,8 @@ export function TrustIndicators() {
             </div>
             <H3 className="text-white mb-2">99.9% Uptime</H3>
             <Paragraph className="text-blue-100">
-              Reliable platform with enterprise-grade infrastructure and 24/7 monitoring
+              Reliable platform with enterprise-grade infrastructure and 24/7
+              monitoring
             </Paragraph>
           </div>
 
@@ -47,5 +50,5 @@ export function TrustIndicators() {
         </div>
       </div>
     </section>
-  );
+  )
 }

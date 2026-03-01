@@ -1,77 +1,87 @@
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { Activity, Calendar, FileText, Home, Pill, Settings } from "lucide-react";
-import type { SidebarItems } from "@/components/app-sidebar";
-import type { RoutePath } from "@/types/routes";
-import { SidebarInset, SidebarProvider } from "@/components/animate-ui/components/radix/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { getJwt, getSession } from "@/lib/auth-session";
-import { setAuthToken } from "@/lib/client-auth-config";
-import { UserMenu } from "@/components/user-menu";
-import type { User } from "@/types/auth";
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import {
+  Activity,
+  Calendar,
+  FileText,
+  Home,
+  Pill,
+  Settings,
+} from 'lucide-react'
+import type { SidebarItems } from '@/components/app-sidebar'
+import type { RoutePath } from '@/types/routes'
+import {
+  SidebarInset,
+  SidebarProvider,
+} from '@/components/animate-ui/components/radix/sidebar'
+import { AppSidebar } from '@/components/app-sidebar'
+import { getJwt, getSession } from '@/lib/auth-session'
+import { setAuthToken } from '@/lib/client-auth-config'
+import { UserMenu } from '@/components/user-menu'
+import type { User } from '@/types/auth'
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute('/dashboard')({
   beforeLoad: async () => {
-    const session = await getSession();
+    const session = await getSession()
 
-    console.debug("[DASHBOARD]", { session });
+    console.debug('[DASHBOARD]', { session })
 
     if (!session) {
-      throw redirect({ to: "/auth" });
+      throw redirect({ to: '/auth' })
     }
 
-    if (session.user.role === "admin") {
-      throw redirect({ to: "/admin/dashboard" });
+    if (session.user.role === 'admin') {
+      throw redirect({ to: '/admin/dashboard' })
     }
 
-    const jwt = await getJwt();
+    const jwt = await getJwt()
 
     if (jwt) {
-      setAuthToken(jwt);
+      setAuthToken(jwt)
     }
 
     return {
       hideHeader: true,
       user: session.user,
-    };
+    }
   },
   component: DashboardLayout,
-});
+})
 
 const sidebarItems = (_baseUrl: RoutePath): SidebarItems => [
   {
-    title: "Dashboard",
+    title: 'Dashboard',
     icon: Home,
-    url: "/dashboard",
+    url: '/dashboard',
   },
   {
-    title: "Appointments",
+    title: 'Appointments',
     icon: Calendar,
-    url: "/dashboard/appointments",
+    url: '/dashboard/appointments',
   },
   {
-    title: "Medications",
+    title: 'Medications',
     icon: Pill,
-    url: "/dashboard/medications",
+    url: '/dashboard/medications',
   },
   {
-    title: "Health Metrics",
+    title: 'Health Metrics',
     icon: Activity,
-    url: "/dashboard/health-metrics",
+    url: '/dashboard/health-metrics',
   },
   {
-    title: "Medical Records",
+    title: 'Medical Records',
     icon: FileText,
-    url: "/dashboard" as RoutePath,
+    url: '/dashboard' as RoutePath,
   },
   {
-    title: "Settings",
+    title: 'Settings',
     icon: Settings,
-    url: "/dashboard/settings",
+    url: '/dashboard/settings',
   },
-];
+]
 
 function DashboardLayout() {
-  const { user } = Route.useRouteContext() satisfies { user: User };
+  const { user } = Route.useRouteContext() satisfies { user: User }
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -89,5 +99,5 @@ function DashboardLayout() {
         </SidebarInset>
       </div>
     </SidebarProvider>
-  );
+  )
 }

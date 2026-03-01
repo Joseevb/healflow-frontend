@@ -1,4 +1,8 @@
-import type { ComponentType, HTMLInputAutoCompleteAttribute, ReactNode } from "react";
+import type {
+  ComponentType,
+  HTMLInputAutoCompleteAttribute,
+  ReactNode,
+} from 'react'
 
 /**
  * Defines the orientation of the field or field group.
@@ -6,30 +10,30 @@ import type { ComponentType, HTMLInputAutoCompleteAttribute, ReactNode } from "r
  * - 'horizontal': Label and control are side-by-side.
  * - 'responsive': Label and control are horizontal on larger screens, vertical on smaller screens.
  */
-export type Orientation = "vertical" | "horizontal" | "responsive";
+export type Orientation = 'vertical' | 'horizontal' | 'responsive'
 
 /**
  * Configuration for grouping fields side-by-side within a FieldGroup.
  */
 export type GroupConfig = {
   /** The name of the group. Fields with the same group name will be rendered together in a FieldGroup. */
-  name: string;
+  name: string
   /** The orientation of the fields inside this group. Overrides the field's individual orientation. */
-  orientation?: Orientation;
+  orientation?: Orientation
   /** Custom className applied to the FieldGroup container. */
-  className?: string;
+  className?: string
   /** If true, adds a FieldSeparator between fields in this group. */
-  separator?: boolean;
-};
+  separator?: boolean
+}
 
 export type SetConfig = {
   /** The legend text for the field, rendered using FieldLegend. */
-  legend?: string;
+  legend?: string
   /** The description text for the field, rendered using FieldDescription. */
-  description?: string;
+  description?: string
   /** Custom className applied to the control element. */
-  controlClassName?: string;
-};
+  controlClassName?: string
+}
 
 /**
  * Base configuration shared by all field types.
@@ -37,154 +41,162 @@ export type SetConfig = {
  */
 type BaseFieldConfig = {
   /** A user-friendly title for the field, rendered using FieldTitle. */
-  title?: string;
+  title?: string
   /** A user-friendly label for the field, rendered using FieldLabel. */
-  label: string;
+  label: string
   /** The field type discriminator. */
-  type: string;
+  type: string
   /** Placeholder text for the input control. */
-  placeholder?: string;
+  placeholder?: string
   /** Additional description text, rendered using FieldDescription. */
-  description?: string;
+  description?: string
   /** Orientation of the field (vertical, horizontal, or responsive). */
-  orientation?: Orientation;
+  orientation?: Orientation
   /** Custom className applied to the root Field component. */
-  className?: string;
+  className?: string
   /** Custom className applied to the control component. */
-  controlClassName?: string;
+  controlClassName?: string
   /** Group configuration for side-by-side field grouping. */
-  group?: GroupConfig;
+  group?: GroupConfig
   /** Set name for wrapping fields in a FieldSet (higher precedence than group). */
-  set?: SetConfig;
-};
+  set?: SetConfig
+}
 
-type TextInputType = "text" | "email" | "password" | "number" | "tel" | "url" | "file" | "date";
+type TextInputType =
+  | 'text'
+  | 'email'
+  | 'password'
+  | 'number'
+  | 'tel'
+  | 'url'
+  | 'file'
+  | 'date'
 
 /**
  * Configuration for standard HTML input types.
  */
 export type InputFieldConfig = BaseFieldConfig & {
-  type: TextInputType;
-  autocomplete?: HTMLInputAutoCompleteAttribute;
+  type: TextInputType
+  autocomplete?: HTMLInputAutoCompleteAttribute
   /** Icon to be displayed inside the input control. */
-  icon?: React.ReactNode;
-};
+  icon?: React.ReactNode
+}
 
 /**
  * Configuration for composable end text that displays a string property value.
  */
 export type ComposableEndText = {
   /** A valid property or method name of the string object (e.g., 'length', 'toUpperCase') */
-  valueField: keyof string;
+  valueField: keyof string
   /** Message to display after the computed value (e.g., '/ 100 characters') */
-  message: string;
-};
+  message: string
+}
 
 /**
  * Configuration for textarea fields.
  */
 export type TextareaFieldConfig = BaseFieldConfig & {
-  type: "textarea";
-  rows?: number;
-  endText?: ComposableEndText;
-};
+  type: 'textarea'
+  rows?: number
+  endText?: ComposableEndText
+}
 
 /**
  * Configuration for select dropdown fields.
  */
 export type SelectFieldConfig<TValue> = BaseFieldConfig & {
-  type: "select";
+  type: 'select'
   options: Array<{
-    label: string;
-    value: TValue extends string ? TValue : string;
-  }>;
-};
+    label: string
+    value: TValue extends string ? TValue : string
+  }>
+}
 
 /**
  * Configuration for radio group fields.
  */
 export type RadioFieldConfig<TValue> = BaseFieldConfig & {
-  type: "radio";
+  type: 'radio'
   options: Array<{
-    label: string;
-    value: TValue extends string ? TValue : string;
-    description?: string;
-  }>;
-  size?: "small" | "large";
-};
+    label: string
+    value: TValue extends string ? TValue : string
+    description?: string
+  }>
+  size?: 'small' | 'large'
+}
 
 /**
  * Configuration for checkbox fields (single boolean).
  */
 export type CheckboxFieldConfig = BaseFieldConfig & {
-  type: "checkbox";
-};
+  type: 'checkbox'
+}
 
 export type CheckboxGroupFieldConfig<TValue> = BaseFieldConfig & {
-  type: "checkbox-group";
+  type: 'checkbox-group'
   items: Array<{
-    label: string;
-    value: TValue extends Array<infer ItemType> ? ItemType : string;
-    orientation?: Orientation;
-  }>;
-};
+    label: string
+    value: TValue extends Array<infer ItemType> ? ItemType : string
+    orientation?: Orientation
+  }>
+}
 
 /**
  * Configuration for switch fields (boolean toggle).
  */
 export type SwitchFieldConfig = BaseFieldConfig & {
-  type: "switch";
-};
+  type: 'switch'
+}
 
 /**
  * Configuration for slider fields with a single number value.
  */
 type SliderSingleValueConfig = BaseFieldConfig & {
-  type: "slider";
+  type: 'slider'
   /** Single value mode */
-  range?: false;
+  range?: false
   /** Minimum value for the slider. */
-  min: number;
+  min: number
   /** Maximum value for the slider. */
-  max: number;
+  max: number
   /** Step increment for the slider. */
-  step?: number;
+  step?: number
   /** Default value must be a number. */
-  defaultValue?: number;
-};
+  defaultValue?: number
+}
 
 /**
  * Configuration for slider fields with a range (array of two numbers).
  */
 type SliderRangeConfig = BaseFieldConfig & {
-  type: "slider";
+  type: 'slider'
   /** Range mode enabled */
-  range: true;
+  range: true
   /** Minimum value for the slider. */
-  min: number;
+  min: number
   /** Maximum value for the slider. */
-  max: number;
+  max: number
   /** Step increment for the slider. */
-  step?: number;
+  step?: number
   /** Default value must be an array of two numbers [min, max]. */
-  defaultValue?: [number, number];
-};
+  defaultValue?: [number, number]
+}
 
 /**
  * Union type for slider field configs.
  */
-export type SliderFieldConfig = SliderSingleValueConfig | SliderRangeConfig;
+export type SliderFieldConfig = SliderSingleValueConfig | SliderRangeConfig
 
 export type CustomFieldConfig = {
-  type: "custom";
-  render: ReactNode;
-};
+  type: 'custom'
+  render: ReactNode
+}
 
 export type ObjectFieldConfig<TValue> = BaseFieldConfig & {
-  type: "object";
+  type: 'object'
   /** Recursively define fields for the nested object */
-  fields: FieldConfigs<TValue extends Record<string, unknown> ? TValue : never>;
-};
+  fields: FieldConfigs<TValue extends Record<string, unknown> ? TValue : never>
+}
 
 /**
  * Discriminating union of all field configuration types.
@@ -199,7 +211,7 @@ export type FieldConfig<TValue = unknown> =
   | SwitchFieldConfig
   | SliderFieldConfig
   | CustomFieldConfig
-  | ObjectFieldConfig<TValue>;
+  | ObjectFieldConfig<TValue>
 
 /**
  * Helper type: A FieldConfig that is NOT a nested object.
@@ -207,8 +219,8 @@ export type FieldConfig<TValue = unknown> =
  */
 export type PrimitiveFieldConfig<TValue = unknown> = Exclude<
   FieldConfig<TValue>,
-  { type: "object" }
->;
+  { type: 'object' }
+>
 
 /**
  * Utility type to extract a specific field config type by its type discriminator.
@@ -216,65 +228,67 @@ export type PrimitiveFieldConfig<TValue = unknown> = Exclude<
  * type TextareaConfig = ExtractFieldConfig<'textarea'> // TextareaFieldConfig
  * type SliderConfig = ExtractFieldConfig<'slider'> // SliderFieldConfig
  */
-export type ExtractFieldConfig<TType extends FieldConfig["type"]> = Extract<
+export type ExtractFieldConfig<TType extends FieldConfig['type']> = Extract<
   FieldConfig,
   { type: TType }
->;
+>
 
 /**
  * Record of field configurations keyed by field names.
  */
 export type FieldConfigs<TValues extends Record<string, unknown>> = {
-  [K in keyof TValues]: FieldConfig<TValues[K]>;
-};
+  [K in keyof TValues]: FieldConfig<TValues[K]>
+}
 
 export type CommonFieldProps = {
-  label: string;
-  className?: string;
-  description?: string;
-  placeholder?: string;
-  orientation?: Orientation;
-};
+  label: string
+  className?: string
+  description?: string
+  placeholder?: string
+  orientation?: Orientation
+}
 
 export type FieldRenderApi = {
-  TextAreaField: ComponentType<CommonFieldProps & { rows?: number; endText?: ComposableEndText }>;
+  TextAreaField: ComponentType<
+    CommonFieldProps & { rows?: number; endText?: ComposableEndText }
+  >
   SelectField: ComponentType<
     CommonFieldProps & { options: Array<{ label: string; value: unknown }> }
-  >;
+  >
   RadioField: ComponentType<
     CommonFieldProps & {
-      options: Array<{ label: string; value: unknown; description?: string }>;
-      size?: "small" | "large";
+      options: Array<{ label: string; value: unknown; description?: string }>
+      size?: 'small' | 'large'
     }
-  >;
-  CheckboxField: ComponentType<CommonFieldProps>;
+  >
+  CheckboxField: ComponentType<CommonFieldProps>
   CheckboxGroupField: ComponentType<
     CommonFieldProps & {
-      items: Array<{ label: string; value: unknown; orientation?: Orientation }>;
+      items: Array<{ label: string; value: unknown; orientation?: Orientation }>
     }
-  >;
-  SwitchField: ComponentType<CommonFieldProps>;
+  >
+  SwitchField: ComponentType<CommonFieldProps>
   SliderField: ComponentType<
     CommonFieldProps & {
-      min: number;
-      max: number;
-      step?: number;
-      title?: string;
-      range?: boolean;
+      min: number
+      max: number
+      step?: number
+      title?: string
+      range?: boolean
     }
-  >;
+  >
   TextField: ComponentType<
     CommonFieldProps & {
-      type: string;
-      autocomplete?: HTMLInputAutoCompleteAttribute;
-      icon?: ReactNode;
+      type: string
+      autocomplete?: HTMLInputAutoCompleteAttribute
+      icon?: ReactNode
     }
-  >;
-};
+  >
+}
 
 export type FormApi = {
   AppField: ComponentType<{
-    name: string;
-    children: (field: FieldRenderApi) => ReactNode;
-  }>;
-};
+    name: string
+    children: (field: FieldRenderApi) => ReactNode
+  }>
+}
