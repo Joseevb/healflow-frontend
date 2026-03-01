@@ -32,8 +32,8 @@ export const Route = createFileRoute('/auth/callback/stripe')({
               user_id: createdUserId!,
               email: accountData!.email,
               specialist_id: userData!.primaryCareSpecialist,
-              first_name: accountData!.firstName,
-              last_name: accountData!.lastName,
+              first_name: accountData!.firstName || undefined,
+              last_name: accountData!.lastName || undefined,
               phone: userData!.phoneNumber,
             }),
           )

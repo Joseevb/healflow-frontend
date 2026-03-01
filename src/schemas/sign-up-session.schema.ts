@@ -6,8 +6,8 @@ import { signUpState } from '@/types/auth'
 // Create a lenient version of signUpBaseSchema for session validation
 // that allows empty firstName and lastName (for social sign-on)
 const signUpBaseSchemaLenient = signUpBaseSchema.extend({
-  firstName: z.string().optional().default(''),
-  lastName: z.string().optional().default(''),
+  firstName: z.string().optional().nullable().default(''),
+  lastName: z.string().optional().nullable().default(''),
 })
 
 export const signUpSession = z.object({

@@ -19,8 +19,9 @@
     "**/snap/**",
     "**/vite.config.*.timestamp-*.*",
     "src/client/**",
-    "**/components/ui/**",
-    "**/components/animate-ui/**"
+    "src/components/ui/**",
+    "src/components/animate-ui/**",
+    "src/db/schemas/auth-schema.ts"
   ],
   "rules": {
     "import/no-unassigned-import": "allow",
