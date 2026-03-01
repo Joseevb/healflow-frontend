@@ -32,6 +32,12 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      scopes: ['openid', 'email', 'profile'],
+      mapProfileToUser: (profile) => ({
+        name: `${profile.given_name} ${profile.family_name}`,
+        firstName: profile.given_name,
+        lastName: profile.family_name,
+      })
     },
   },
   emailAndPassword: { enabled: true, requireEmailVerification: false },
@@ -79,6 +85,16 @@ export const auth = betterAuth({
       onboardingCompleted: {
         type: 'boolean',
         defaultValue: false,
+      },
+      firstName: {
+        type: 'string',
+        defaultValue: '',
+        required: false
+      },
+      lastName: {
+        type: 'string',
+        defaultValue: '',
+        required: false
       },
     },
   },
