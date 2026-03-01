@@ -333,8 +333,8 @@ const ErrorBoundaryComponent = memo(function ErrorBoundaryComponent({
                 Failed to Load Health Metrics
               </h3>
               <p className="text-red-700 dark:text-red-300 max-w-md">
-                We couldn't retrieve your health data. Please try refreshing the
-                page or contact support if the problem persists.
+                We couldn&apost retrieve your health data. Please try refreshing
+                the page or contact support if the problem persists.
               </p>
               <details className="mt-4">
                 <summary className="text-sm text-red-600 dark:text-red-400 cursor-pointer hover:underline">

@@ -17,7 +17,7 @@ import type { ErrorComponentProps } from '@tanstack/react-router'
 
 import type { QueryClient } from '@tanstack/react-query'
 import Header from '@/components/header'
-import { syncUsers, runCreateAdminUser } from '@/server/auth'
+import { runCreateAdminUser, syncUsers } from '@/server/auth'
 import {
   AlertDialog,
   AlertDialogAction,

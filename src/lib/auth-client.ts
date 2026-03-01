@@ -7,7 +7,7 @@ import { createAuthClient } from 'better-auth/react'
 import { stripeClient } from '@better-auth/stripe/client'
 import { ac, admin, specialist, user } from './auth-roles'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
-import { auth } from './auth'
+import type { auth } from './auth'
 
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_PUBLIC_APP_URL,

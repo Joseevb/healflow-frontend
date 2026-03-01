@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
+import type { ColumnDef } from '@tanstack/react-table'
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -16,11 +16,12 @@ import {
 } from '@/components/ui/table'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: Array<ColumnDef<TData, TValue>>
+  data: Array<TData>
   className?: string
 }
 
+// DataTable.tsx
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -34,13 +35,18 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full overflow-x-auto rounded-md border">
-      <Table className={cn('min-w-full', className)}>
+      <Table className={cn('w-full table-fixed', className)}>
+        {' '}
+        {/* ← table-fixed here */}
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className="whitespace-nowrap" // ← prevent header wrapping
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -61,7 +67,10 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    className="truncate" // ← truncate overflowing cell content
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

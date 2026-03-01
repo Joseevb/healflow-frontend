@@ -47,7 +47,7 @@ export function buildLayoutTree<TData extends Record<string, unknown>>(
       ) {
         // Remove the 'set' and 'group' properties to prevent infinite recursion
         // and conflicting grouping (set takes precedence over group)
-        const { set, group, ...configWithoutSetAndGroup } = entries[j][1]
+        const { _set, _group, ...configWithoutSetAndGroup } = entries[j][1]
         setChildren[entries[j][0]] = configWithoutSetAndGroup
         j++
       }

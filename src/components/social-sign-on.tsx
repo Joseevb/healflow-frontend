@@ -4,7 +4,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import type { IsLoading, SocialSignOnProvider } from '../types/auth'
 import { Button } from '@/components/ui/button'
 import { signIn } from '@/lib/auth-client'
-import { RoutePath } from '@/types/routes'
+import type { RoutePath } from '@/types/routes'
 
 export const socialSignOnProviders: Array<SocialSignOnProvider> = [
   {

@@ -156,6 +156,55 @@ function LoadingComponent() {
 }
 
 // Error Component
+function getErrorConfig(status?: number) {
+  switch (status) {
+    case 401:
+      return {
+        title: 'Authentication Required',
+        message:
+          'Your session has expired. Please sign in again to access your dashboard.',
+        iconColor: 'text-yellow-600 dark:text-yellow-400',
+        iconBg: 'bg-yellow-100 dark:bg-yellow-900/30',
+        cardBg: 'bg-yellow-50/50 dark:bg-yellow-900/10',
+        borderColor: 'border-yellow-200 dark:border-yellow-800',
+        showSignInButton: true,
+      }
+    case 404:
+      return {
+        title: 'Data Not Available',
+        message:
+          'Some of your dashboard data is not available yet. This is normal for new accounts. Your data will appear here once you have appointments or health metrics recorded by your doctor.',
+        iconColor: 'text-blue-600 dark:text-blue-400',
+        iconBg: 'bg-blue-100 dark:bg-blue-900/30',
+        cardBg: 'bg-blue-50/50 dark:bg-blue-900/10',
+        borderColor: 'border-blue-200 dark:border-blue-800',
+        showSignInButton: false,
+      }
+    case 500:
+    case 503:
+      return {
+        title: 'Server Error',
+        message:
+          'Our servers are experiencing issues. Please try again in a few moments.',
+        iconColor: 'text-red-600 dark:text-red-400',
+        iconBg: 'bg-red-100 dark:bg-red-900/30',
+        cardBg: 'bg-red-50/50 dark:bg-red-900/10',
+        borderColor: 'border-red-200 dark:border-red-800',
+        showSignInButton: false,
+      }
+    default:
+      return {
+        title: 'Failed to Load Dashboard',
+        message:
+          "We couldn't retrieve your dashboard information. Please try refreshing the page or contact support if the problem persists.",
+        iconColor: 'text-red-600 dark:text-red-400',
+        iconBg: 'bg-red-100 dark:bg-red-900/30',
+        cardBg: 'bg-red-50/50 dark:bg-red-900/10',
+        borderColor: 'border-red-200 dark:border-red-800',
+        showSignInButton: false,
+      }
+  }
+}
 
 function ErrorBoundaryComponent({ error }: { error: Error }) {
   // Try to extract status code from error object
@@ -165,55 +214,6 @@ function ErrorBoundaryComponent({ error }: { error: Error }) {
   console.count(`DASHBOARD_ERROR_${errorStatus || 'UNKNOWN'}`)
 
   // Define user-friendly messages per status code
-  const getErrorConfig = (status?: number) => {
-    switch (status) {
-      case 401:
-        return {
-          title: 'Authentication Required',
-          message:
-            'Your session has expired. Please sign in again to access your dashboard.',
-          iconColor: 'text-yellow-600 dark:text-yellow-400',
-          iconBg: 'bg-yellow-100 dark:bg-yellow-900/30',
-          cardBg: 'bg-yellow-50/50 dark:bg-yellow-900/10',
-          borderColor: 'border-yellow-200 dark:border-yellow-800',
-          showSignInButton: true,
-        }
-      case 404:
-        return {
-          title: 'Data Not Available',
-          message:
-            'Some of your dashboard data is not available yet. This is normal for new accounts. Your data will appear here once you have appointments or health metrics recorded by your doctor.',
-          iconColor: 'text-blue-600 dark:text-blue-400',
-          iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-          cardBg: 'bg-blue-50/50 dark:bg-blue-900/10',
-          borderColor: 'border-blue-200 dark:border-blue-800',
-          showSignInButton: false,
-        }
-      case 500:
-      case 503:
-        return {
-          title: 'Server Error',
-          message:
-            'Our servers are experiencing issues. Please try again in a few moments.',
-          iconColor: 'text-red-600 dark:text-red-400',
-          iconBg: 'bg-red-100 dark:bg-red-900/30',
-          cardBg: 'bg-red-50/50 dark:bg-red-900/10',
-          borderColor: 'border-red-200 dark:border-red-800',
-          showSignInButton: false,
-        }
-      default:
-        return {
-          title: 'Failed to Load Dashboard',
-          message:
-            "We couldn't retrieve your dashboard information. Please try refreshing the page or contact support if the problem persists.",
-          iconColor: 'text-red-600 dark:text-red-400',
-          iconBg: 'bg-red-100 dark:bg-red-900/30',
-          cardBg: 'bg-red-50/50 dark:bg-red-900/10',
-          borderColor: 'border-red-200 dark:border-red-800',
-          showSignInButton: false,
-        }
-    }
-  }
 
   const config = getErrorConfig(errorStatus)
 
@@ -675,7 +675,7 @@ function RouteComponent() {
 
     // Sort by timestamp descending, take top 5
     return activities
-      .sort(
+      .toSorted(
         (a, b) =>
           new Date(b.rawTimestamp).getTime() -
           new Date(a.rawTimestamp).getTime(),

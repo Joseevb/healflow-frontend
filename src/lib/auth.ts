@@ -2,7 +2,7 @@ import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { admin as adminPlugin, jwt, openAPI } from 'better-auth/plugins'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
-import Stripe from 'stripe'
+import StripeClient from 'stripe'
 import { stripe } from '@better-auth/stripe'
 
 import { db } from '@/db'
@@ -11,7 +11,7 @@ import { v7 } from 'uuid'
 import * as schema from '@/db/schemas'
 import { ac, admin, specialist, user } from './auth-roles'
 
-const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripeClient = new StripeClient(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-02-25.clover',
 })
 

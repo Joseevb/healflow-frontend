@@ -38,17 +38,17 @@ export const getJwt = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
   .handler(({ context }) => context.jwt)
 
+// TODO: Implement this
+async function storeImage(file: File) {
+  const imageName = file.name.replace(/\.[^/.]+$/, '')
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+  return imageName
+}
+
 export const createUser = createServerFn({ method: 'POST' })
   .inputValidator(signUpSession)
   .handler(async ({ data }) => {
     const session = await getSignUpSession()
-
-    // TODO: Implement this
-    async function storeImage(file: File) {
-      const imageName = file.name.replace(/\.[^/.]+$/, '')
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return imageName
-    }
 
     switch (data.state) {
       // Email signup: Create Better Auth user immediately

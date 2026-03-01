@@ -7,7 +7,7 @@ import type { ImageStorage } from './types'
 const env = process.env
 
 export const StorageLive = makeStorageLayer(
-  env.STORAGE_PROVIDER! === 's3'
+  env.STORAGE_PROVIDER === 's3'
     ? {
         provider: 's3',
         s3: {

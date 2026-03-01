@@ -334,7 +334,7 @@ function TooltipOverlay() {
                   {...rendered.data.contentProps}
                   style={{
                     position: 'relative',
-                    ...(rendered.data.contentProps?.style || {}),
+                    ...rendered.data.contentProps?.style,
                   }}
                 />
               </RenderedTooltipProvider>
