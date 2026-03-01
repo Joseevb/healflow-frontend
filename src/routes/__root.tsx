@@ -17,7 +17,7 @@ import type { ErrorComponentProps } from "@tanstack/react-router";
 
 import type { QueryClient } from "@tanstack/react-query";
 import Header from "@/components/header";
-import { syncUsers } from "@/server/auth";
+import { syncUsers, runCreateAdminUser } from "@/server/auth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,7 +28,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Toaster } from "@/components/ui/sonner";
-import { runCreateAdminUser } from "@/lib/auth";
 
 function NotFoundComponent() {
   const location = useLocation();

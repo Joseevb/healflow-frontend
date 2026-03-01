@@ -8,6 +8,10 @@ import { UserSyncService } from "@/services/user-sync.service";
 import { validateUser } from "@/client/sdk.gen";
 import { attempt } from "@/lib/attempt";
 import { updateSignUpSession } from "./session";
+import { TaggedError } from "effect/Data";
+import { db } from "@/db";
+import { users } from "@/db/schemas";
+import { eq } from "drizzle-orm";
 
 /**
  * Checks if the current user is new (not yet provisioned in backend).
@@ -156,3 +160,44 @@ export const syncUsers = createServerFn({ method: "GET" }).handler(async () => {
     return { validated: 0, deleted: 0, error: "Unexpected error during sync" };
   }
 });
+
+export class CreateAdminUserError extends TaggedError("CreateAdminUserError")<{
+  message: string;
+}> {}
+
+const createAdminUser = () =>
+  Effect.tryPromise({
+    try: async () => {
+      const result = await auth.api.signUpEmail({
+        body: {
+          email: "admin@admin.admin",
+          password: "admin12345",
+          name: "admin",
+        },
+      });
+
+      const user = (
+        await db
+          .update(users)
+          .set({ role: "admin" })
+          .where(eq(users.id, result.user.id))
+          .returning()
+      )[0];
+
+      if (user) {
+        console.log("Created admin user:", user);
+        return user;
+      }
+
+      console.log("Admin user already exists");
+      return user;
+    },
+    catch: (err) => {
+      const message = err instanceof Error ? err.message : String(err);
+      return new CreateAdminUserError({ message });
+    },
+  });
+
+export const runCreateAdminUser = createServerFn().handler(() =>
+  Effect.runPromise(createAdminUser()),
+);

@@ -1,42 +1,18 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin as adminPlugin, createAccessControl, jwt, openAPI } from "better-auth/plugins";
+import { admin as adminPlugin, jwt, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import Stripe from "stripe";
 import { stripe } from "@better-auth/stripe";
-import { Effect } from "effect";
-import { TaggedError } from "effect/Data";
 
-import { v7 } from "uuid";
 import { db } from "@/db";
+import { v7 } from "uuid";
 
 import * as schema from "@/db/schemas";
-import { adminAc, defaultStatements } from "better-auth/plugins/organization/access";
-import { users } from "@/db/schemas";
-import { eq } from "drizzle-orm";
-
-const statement = {
-  specialist: ["create", "read", "update", "delete"],
-} as const;
-
-export const ac = createAccessControl(statement);
-
-export const user = ac.newRole({
-  ...defaultStatements,
-  specialist: ["read"],
-});
-
-export const admin = ac.newRole({
-  ...adminAc.statements,
-  specialist: ["create", "read", "update", "delete"],
-});
-
-export const specialist = ac.newRole({
-  specialist: ["read", "update"],
-});
+import { ac, admin, specialist, user } from "./auth-roles";
 
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-01-28.clover",
+  apiVersion: "2026-02-25.clover",
 });
 
 export const auth = betterAuth({
@@ -100,44 +76,3 @@ export const auth = betterAuth({
   },
   callbackURL: "/dashboard",
 });
-
-export class CreateAdminUserError extends TaggedError("CreateAdminUserError")<{
-  message: string;
-}> {}
-
-const createAdminUser = () =>
-  Effect.tryPromise({
-    try: async () => {
-      const result = await auth.api.signUpEmail({
-        body: {
-          email: "admin@admin.admin",
-          password: "admin12345",
-          name: "admin",
-        },
-      });
-
-      const user = (
-        await db
-          .update(users)
-          .set({ role: "admin" })
-          .where(eq(users.id, result.user.id))
-          .returning()
-      )[0];
-
-      if (user) {
-        console.log("Created admin user:", user);
-        return user;
-      }
-
-      console.log("Admin user already exists");
-      return user;
-    },
-    catch: (err) => {
-      const message = err instanceof Error ? err.message : String(err);
-      return new CreateAdminUserError({ message });
-    },
-  });
-
-export function runCreateAdminUser() {
-  return Effect.runPromise(createAdminUser());
-}
