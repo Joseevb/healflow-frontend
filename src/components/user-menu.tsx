@@ -9,10 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getInitials } from "@/lib/utils";
-import { signOut } from "better-auth/api";
 import { LogOut, Moon, Settings, Sun, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { User } from "@/types/auth";
+import { signOut } from "@/lib/auth-client";
 
 export function UserMenu({ user }: { user: User }) {
   const navigate = useNavigate();

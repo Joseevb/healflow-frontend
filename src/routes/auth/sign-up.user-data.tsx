@@ -10,14 +10,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { userDataSchema } from "@/schemas/user-data.schema";
 import { getAvailableSpecialistsOptions } from "@/client/@tanstack/react-query.gen";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { createUser, getSessionData } from "@/lib/auth-session";
+import { createUser, getJwt, getSessionData } from "@/lib/auth-session";
 import { useAppForm } from "@/hooks/form-context";
 import { dynamicFormFactory } from "@/components/dynamic-form";
+import { setAuthToken } from "@/lib/client-auth-config";
 
 export const Route = createFileRoute("/auth/sign-up/user-data")({
   component: RouteComponent,
   loader: async ({ context }) => {
     const sessionData = await getSessionData();
+
+    console.log(sessionData);
 
     if (sessionData.state === "success") {
       throw redirect({
@@ -29,6 +32,12 @@ export const Route = createFileRoute("/auth/sign-up/user-data")({
       throw redirect({
         to: "/auth/sign-up",
       });
+    }
+
+    const jwt = await getJwt();
+
+    if (jwt) {
+      setAuthToken(jwt);
     }
 
     // Prefetch specialists data for optimal performance

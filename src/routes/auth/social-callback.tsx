@@ -16,8 +16,7 @@ export const Route = createFileRoute("/auth/social-callback")({
 
         const { user } = session;
 
-        const accountAgeInMs = Date.now() - new Date(user.createdAt).getTime();
-        const isNewUser = accountAgeInMs < 15000;
+        const isNewUser = !user.onboardingCompleted;
 
         console.log("[social-callback] isNewUser:", isNewUser);
 

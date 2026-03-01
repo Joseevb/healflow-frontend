@@ -14,10 +14,12 @@ export const Route = createFileRoute("/auth")({
       session,
     };
   },
-  loader: ({ context }) => {
+  loader: ({ context, route }) => {
     const session = context.session;
 
-    if (session && !location.pathname.startsWith("/auth/sign-up")) {
+    console.log("[AUTH]", { routeFullPath: route.fullPath, route });
+
+    if (session && !route.fullPath.startsWith("/auth")) {
       throw redirect({ to: "/dashboard" });
     }
   },
@@ -32,7 +34,6 @@ export default function RouteComponent() {
           alt="background"
           className="h-full w-full object-cover"
           layout="fullWidth"
-          priority={true}
         />
         <div className="absolute inset-0 bg-secondary/25 backdrop-filter dark:bg-background/75 backdrop-blur-md" />
       </div>

@@ -74,5 +74,13 @@ export const auth = betterAuth({
       enabled: true,
     },
   },
+  user: {
+    additionalFields: {
+      onboardingCompleted: {
+        type: "boolean",
+        defaultValue: false,
+      },
+    },
+  },
   callbackURL: "/dashboard",
 });

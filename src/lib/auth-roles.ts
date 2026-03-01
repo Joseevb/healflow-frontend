@@ -2,13 +2,13 @@ import { createAccessControl } from "better-auth/plugins";
 import { adminAc, defaultStatements } from "better-auth/plugins/organization/access";
 
 const statement = {
+  ...defaultStatements,
   specialist: ["create", "read", "update", "delete"],
 } as const;
 
 export const ac = createAccessControl(statement);
 
 export const user = ac.newRole({
-  ...defaultStatements,
   specialist: ["read"],
 });
 

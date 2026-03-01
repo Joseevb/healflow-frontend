@@ -4,6 +4,7 @@ import { UserRegistrationService } from "@/services/user-registration.service";
 import { apiKeyConfig } from "@/lib/api-key.config";
 import { attempt } from "@/lib/attempt";
 import { clearSignUpSession, getSignUpSession } from "@/server/session";
+import { auth } from "@/lib/auth";
 
 export const Route = createFileRoute("/auth/callback/stripe")({
   server: {
@@ -14,6 +15,13 @@ export const Route = createFileRoute("/auth/callback/stripe")({
         // if (!createdUserId || !accountData || !userData) {
         //   throw redirect({ to: "/auth/sign-up" });
         // }
+
+        await auth.api.updateUser({
+          headers: request.headers,
+          body: {
+            onboardingCompleted: true,
+          },
+        });
 
         // Provision to backend API
         const { error: provisionError } = await attempt(async () => {

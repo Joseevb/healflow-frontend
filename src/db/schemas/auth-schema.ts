@@ -5,7 +5,9 @@ export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).default(false).notNull(),
+  emailVerified: integer("email_verified", { mode: "boolean" })
+    .default(false)
+    .notNull(),
   image: text("image"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" })
@@ -16,6 +18,9 @@ export const users = sqliteTable("users", {
   banReason: text("ban_reason"),
   banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
   stripeCustomerId: text("stripe_customer_id"),
+  onboardingCompleted: integer("onboarding_completed", {
+    mode: "boolean",
+  }).default(false),
 });
 
 export const sessions = sqliteTable(
@@ -107,6 +112,8 @@ export const subscriptions = sqliteTable("subscriptions", {
   canceledAt: integer("canceled_at", { mode: "timestamp_ms" }),
   endedAt: integer("ended_at", { mode: "timestamp_ms" }),
   seats: integer("seats"),
+  billingInterval: text("billing_interval"),
+  stripeScheduleId: text("stripe_schedule_id"),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

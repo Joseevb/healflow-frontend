@@ -13,6 +13,8 @@ export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
     const session = await getSession();
 
+    console.debug("[DASHBOARD]", { session });
+
     if (!session) {
       throw redirect({ to: "/auth" });
     }

@@ -53,6 +53,8 @@ export const Route = createFileRoute("/admin/dashboard")({
       context.queryClient.ensureQueryData(getAllAuthUsersOptions),
     ]);
 
+    console.log({ session });
+
     return {
       hideHeader: true,
       user: session.user,
@@ -180,7 +182,11 @@ function Dashboard() {
     });
   }, [users, authUsers]);
 
-  return <DataTable columns={columns} data={tableData} />;
+  return (
+    <div className="container mx-auto py-10">
+      <DataTable columns={columns} data={tableData} />
+    </div>
+  );
 }
 
 function RouteComponent() {

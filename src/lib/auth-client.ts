@@ -2,6 +2,8 @@ import { adminClient, inferAdditionalFields, jwtClient } from "better-auth/clien
 import { createAuthClient } from "better-auth/react";
 import { stripeClient } from "@better-auth/stripe/client";
 import { ac, admin, specialist, user } from "./auth-roles";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { auth } from "./auth";
 
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_PUBLIC_APP_URL,
@@ -15,10 +17,11 @@ export const authClient = createAuthClient({
         specialist,
       },
     }),
-    inferAdditionalFields(),
+    inferAdditionalFields<typeof auth>(),
     stripeClient({
       subscription: true,
     }),
+    tanstackStartCookies(),
   ],
   callbackURL: "/dashboard",
 });

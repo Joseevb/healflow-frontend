@@ -4,6 +4,7 @@ import type { Dispatch, SetStateAction } from "react";
 import type { IsLoading, SocialSignOnProvider } from "../types/auth";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
+import { RoutePath } from "@/types/routes";
 
 export const socialSignOnProviders: Array<SocialSignOnProvider> = [
   {
@@ -39,7 +40,7 @@ export default function SocialSignOn({ isLoading, setIsLoading }: SocialSignOnPr
               console.log("Calling signIn.social...");
               const result = await signIn.social({
                 provider: provider.name,
-                callbackURL: "/dashboard",
+                callbackURL: "/auth/social-callback" as RoutePath,
               });
               console.log("Result:", result); // This may never log if redirect happens
             } catch (err) {

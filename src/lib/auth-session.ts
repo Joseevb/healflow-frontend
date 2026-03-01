@@ -108,6 +108,6 @@ export const createUser = createServerFn({ method: "POST" })
     }
   });
 
-export const getSessionData = createServerFn({ method: "GET" })
-  .middleware([authMiddleware])
-  .handler(async () => await getSignUpSession());
+export const getSessionData = createServerFn({ method: "GET" }).handler(
+  async () => await getSignUpSession(),
+);
